@@ -29,6 +29,28 @@ class Badge:
         h = self.canvas_size
         cx = w / 2
         cy = h / 2
+
+        # The end goal is to have a white space outside the cutter-circle
+        # (semi-transparent in dev mode to see a hint of what's being cut
+        # off; solid white in print mode to avoid printing anything outside)
+        #
+        #   123| design |321
+        #
+        # svg doesn't have "stroke outside the cutter circle" (where the
+        # cutter circle is "|" and the stroke is 123), so we need to
+        # make make a border circle which is larger than the cutter circle
+        # (2), and then stroke both sides of the border (1/3)...
+        #
+        # Also, some printers (and, weirdly, libreoffice) can't handle shaped
+        # semitransparent masks, which is why we can't white-out outside the
+        # border using a mask
+        big_r = (w**2 + h**2)**0.5 / 2
+        big_r_stroke = (big_r * 2) - self.cutter_size
+        # badge sides are a circle half way between the visible circle and
+        # the cutter circle, stroked wide enough to cover the gap between
+        # the two
+        small_r = (self.cutter_size + self.visible_size) / 4
+        small_r_stroke = (self.cutter_size - self.visible_size) / 2
         return f"""
 <svg
     width="{w * self.print_scale}mm"
@@ -38,25 +60,25 @@ class Badge:
     xmlns:xlink="http://www.w3.org/1999/xlink"
 >
     <defs>
-        <mask id="maskCanvas">
-            <rect x="0" y="0" width="{w}" height="{h}" fill="white" />
-        </mask>
-        <mask id="maskOutsideCutter">
-            <rect x="0" y="0" width="{w}" height="{h}" fill="white" />
-            <circle cx="{cx}" cy="{cy}" r="{self.cutter_size/2}" fill="black" />
-        </mask>
-        <mask id="maskBadgeSides">
-            <rect x="0" y="0" width="{w}" height="{h}" fill="black" />
-            <circle cx="{cx}" cy="{cy}" r="{self.cutter_size/2}" fill="white" />
-            <circle cx="{cx}" cy="{cy}" r="{self.visible_size/2}" fill="black" />
-        </mask>
     </defs>
-    <g mask="url(#maskCanvas)">
+    <g>
         <rect x="0" y="0" width="{w}" height="{h}" fill="{self.background}" />
         {inner}
-        <rect x="0" y="0" width="{w}" height="{h}" fill="white" class="whiteOutsideCutter" mask="url(#maskOutsideCutter)" />
-        <rect x="0" y="0" width="{w}" height="{h}" fill="white" class="whiteBadgeSides" mask="url(#maskBadgeSides)" />
-        <circle cx="{cx}" cy="{cy}" r="{self.cutter_size/2}" stroke="black" stroke-width="1" fill="none" />'
+        <text x="0" y="-1" font-size="2">
+          <textPath
+            xlink:href="#side"
+            method="stretch"
+            textLength="100%"
+            spacing="auto"
+            lengthAdjust="spacingAndGlyphs"
+          >
+            ALL THESE SQUARES MAKE A CIRCLE
+          </textPath>
+        </text>
+        <circle cx="{cx}" cy="{cy}" r="{big_r}" stroke="white" class="outsideCutter" stroke-width="{big_r_stroke}" fill="none" />
+        <circle cx="{cx}" cy="{cy}" r="{small_r}" stroke="white" class="badgeSideArea" stroke-width="{small_r_stroke}" fill="none" />
+        <circle id="side" cx="{cx}" cy="{cy}" r="{self.visible_size/2}" stroke="black" class="badgeSideMarker" stroke-width="0.5" stroke-dasharray="2,2" fill="none" />
+        <circle cx="{cx}" cy="{cy}" r="{self.cutter_size/2}" stroke="black" stroke-width="1" fill="none" />
     </g>
 </svg>
 """
@@ -98,18 +120,24 @@ class Sheet:
     <head>
         <title>Test</title>
         <style type="text/css">
-            .whiteOutsideCutter {{
+            .outsideCutter {{
+                opacity: 0.85;
+            }}
+            .badgeSideArea {{
+                opacity: 0.50;
+            }}
+            .badgeSideMarker {{
                 opacity: 0.75;
             }}
-            .whiteBadgeSides {{
-                opacity: 0.25;
-            }}
             @media print {{
-                .whiteOutsideCutter {{
+                .outsideCutter {{
                     opacity: 1.0;
                 }}
-                .whiteBadgeSides {{
-                    opacity: 0.0;
+                .badgeSideArea {{
+                    display: none;
+                }}
+                .badgeSideMarker {{
+                    display: none;
                 }}
             }}
         </style>
