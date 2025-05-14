@@ -1,0 +1,37 @@
+{
+    "name": "badger",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "dev": "rsbuild dev --port 3000",
+        "build": "rsbuild build && tsc --noEmit",
+        "preview": "rsbuild preview",
+        "format": "prettier --write ."
+    },
+    "dependencies": {
+        "@tanstack/react-router": "^1.120.3",
+        "@tanstack/react-router-devtools": "^1.120.3",
+        "autoprefixer": "^10.4.20",
+        "postcss": "^8.5.1",
+        "react": "^19.0.0",
+        "react-dom": "^19.0.0",
+        "react-to-print": "^3.1.0",
+        "tailwindcss": "^3.4.17"
+    },
+    "devDependencies": {
+        "@rsbuild/core": "1.2.4",
+        "@rsbuild/plugin-react": "1.1.0",
+        "@tanstack/router-plugin": "^1.120.3",
+        "@types/react": "^19.0.8",
+        "@types/react-dom": "^19.0.3",
+        "prettier": "^3.5.3",
+        "typescript": "^5.6.2",
+        "usehooks-ts": "^3.1.1"
+    },
+    "prettier": {
+        "trailingComma": "es5",
+        "tabWidth": 4,
+        "semi": false,
+        "singleQuote": true
+    }
+}

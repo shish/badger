@@ -1,0 +1,32 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+    color-scheme: light dark;
+}
+* {
+    @apply border-gray-200 dark:border-gray-800;
+}
+body {
+    @apply bg-gray-50 text-gray-950 dark:bg-gray-900 dark:text-gray-200;
+}
+
+svg {
+    display: inline-block;
+}
+
+@page {
+    margin: 1cm !important;
+}
+
+@media screen {
+    .printOnly {
+        display: none;
+    }
+}
+@media print {
+    .screenOnly {
+        display: none;
+    }
+}
