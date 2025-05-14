@@ -93,7 +93,7 @@ function Controls({
     setShowGuides: (showGuides: boolean) => void
     pageData: PageData
     setPageData: (pageData: PageData) => void
-    pageRef: React.RefObject<HTMLDivElement>
+    pageRef: React.RefObject<HTMLDivElement|null>
 }) {
     const reactToPrintFn = useReactToPrint({
         documentTitle: 'Badges',
