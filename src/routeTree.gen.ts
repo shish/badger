@@ -13,6 +13,8 @@
 import { Route as rootRoute } from './routes/__root'
 import { Route as AboutImport } from './routes/about'
 import { Route as IndexImport } from './routes/index'
+import { Route as BadgesIndexImport } from './routes/badges.index'
+import { Route as BadgesIdImport } from './routes/badges.$id'
 
 // Create/Update Routes
 
@@ -25,6 +27,18 @@ const AboutRoute = AboutImport.update({
 const IndexRoute = IndexImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const BadgesIndexRoute = BadgesIndexImport.update({
+  id: '/badges/',
+  path: '/badges/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const BadgesIdRoute = BadgesIdImport.update({
+  id: '/badges/$id',
+  path: '/badges/$id',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -46,6 +60,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AboutImport
       parentRoute: typeof rootRoute
     }
+    '/badges/$id': {
+      id: '/badges/$id'
+      path: '/badges/$id'
+      fullPath: '/badges/$id'
+      preLoaderRoute: typeof BadgesIdImport
+      parentRoute: typeof rootRoute
+    }
+    '/badges/': {
+      id: '/badges/'
+      path: '/badges'
+      fullPath: '/badges'
+      preLoaderRoute: typeof BadgesIndexImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -54,36 +82,46 @@ declare module '@tanstack/react-router' {
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/badges/$id': typeof BadgesIdRoute
+  '/badges': typeof BadgesIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/badges/$id': typeof BadgesIdRoute
+  '/badges': typeof BadgesIndexRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/badges/$id': typeof BadgesIdRoute
+  '/badges/': typeof BadgesIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about'
+  fullPaths: '/' | '/about' | '/badges/$id' | '/badges'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about'
-  id: '__root__' | '/' | '/about'
+  to: '/' | '/about' | '/badges/$id' | '/badges'
+  id: '__root__' | '/' | '/about' | '/badges/$id' | '/badges/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
+  BadgesIdRoute: typeof BadgesIdRoute
+  BadgesIndexRoute: typeof BadgesIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
+  BadgesIdRoute: BadgesIdRoute,
+  BadgesIndexRoute: BadgesIndexRoute,
 }
 
 export const routeTree = rootRoute
@@ -97,7 +135,9 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/about"
+        "/about",
+        "/badges/$id",
+        "/badges/"
       ]
     },
     "/": {
@@ -105,6 +145,12 @@ export const routeTree = rootRoute
     },
     "/about": {
       "filePath": "about.tsx"
+    },
+    "/badges/$id": {
+      "filePath": "badges.$id.tsx"
+    },
+    "/badges/": {
+      "filePath": "badges.index.tsx"
     }
   }
 }

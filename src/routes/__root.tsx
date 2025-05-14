@@ -17,8 +17,17 @@ function RootComponent() {
                     }}
                     activeOptions={{ exact: true }}
                 >
-                    Home
-                </Link>{' '}
+                    Page
+                </Link>{' | '}
+                <Link
+                    to="/badges"
+                    activeProps={{
+                        className: 'font-bold',
+                    }}
+                    activeOptions={{ exact: true }}
+                >
+                    Badge Library
+                </Link>{' | '}
                 <Link
                     to="/about"
                     activeProps={{

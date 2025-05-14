@@ -29,4 +29,7 @@ svg {
     .screenOnly {
         display: none;
     }
+    .badge {
+        margin: 0.5cm;
+    }
 }

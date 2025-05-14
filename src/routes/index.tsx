@@ -20,17 +20,44 @@ function HomeComponent() {
         'showGuides',
         true
     )
+    const [error, setError] = useState<string | null>(null)
     const contentRef = useRef<HTMLDivElement>(null)
 
     return (
-        <div className="p-2">
-            <Controls
-                showGuides={showGuides}
-                setShowGuides={setShowGuides}
-                pageData={pageData}
-                setPageData={setPageData}
-                pageRef={contentRef}
-            />
+        <div className="p-2 flex flex-col gap-4">
+            <div className="flex gap-4">
+                <div className="flex-none">
+                    <Controls
+                        showGuides={showGuides}
+                        setShowGuides={setShowGuides}
+                        pageData={pageData}
+                        setPageData={setPageData}
+                        pageRef={contentRef}
+                    />
+                </div>
+                <div className="flex-1">
+                    <p>Page data (TODO: Make a GUI editor for this)</p>
+                    <p className="text-red-500">{error}</p>
+                    <textarea
+                        style={{ width: '100%', height: '100%' }}
+                        rows={5}
+                        defaultValue={JSON.stringify(pageData.badges, null, 2)}
+                        onChange={(e) => {
+                            try {
+                                const newPageData = JSON.parse(e.target.value)
+                                setPageData({
+                                    ...pageData,
+                                    badges: newPageData,
+                                })
+                                setError(null)
+                            }
+                            catch (e) {
+                                setError('Invalid JSON')
+                            }
+                        }}
+                    />
+                </div>
+            </div>
             <br />
             {/* for editing */}
             <div className="bg-white text-center">
@@ -96,7 +123,10 @@ function Controls({
                 }}
             />
             <br />
-            <button onClick={reactToPrintFn}>Print</button>
+            <button
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                onClick={reactToPrintFn}
+            >Print</button>
         </div>
     )
 }
@@ -111,12 +141,17 @@ function Page({
     showGuides: boolean
 }) {
     return (
-            Object.entries(pageData.badges).map(([name, count]) => (
-                <Badge
-                    data={badgeData[name]}
-                    showGuides={showGuides}
-                    scale={pageData.scale}
-                />
-            ))
+        Object.entries(pageData.badges).map(([name, count]) => (
+            <>
+                {Array.from({ length: count }).map((_, index) => (
+                    <Badge
+                        key={`${name}-${index}`}
+                        data={badgeData[name]}
+                        showGuides={showGuides}
+                        scale={pageData.scale}
+                    />
+                ))}
+            </>
+        ))
     )
 }
