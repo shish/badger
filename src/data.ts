@@ -1,10 +1,34 @@
+export const LAYER_DEFAULTS: Record<LayerType, LayerData> = {
+    image: {
+        type: 'image',
+        image: 'pride.svg',
+        scale: 1.0,
+        offset: [0, 0],
+    },
+    hflag: {
+        type: 'hflag',
+        stripes: [
+            { color: 'red', size: 2 },
+            { color: 'green', size: 1 },
+            { color: 'blue', size: 2 },
+        ],
+    },
+    'edge-text': {
+        type: 'edge-text',
+        text: 'Hello',
+    },
+}
+
 function simpleBadge(title: string, image: string): BadgeData {
     return {
         title: title,
+        tags: ['q+', 'pride', 'flag'],
         layers: [
             {
                 type: 'image',
                 image: image,
+                scale: 1.0,
+                offset: [0, 0],
             },
             {
                 type: 'edge-text',
@@ -28,6 +52,7 @@ export const defaultBadgeData: Record<string, BadgeData> = {
     pansexual: simpleBadge('Pansexual', 'pansexual.svg'),
     polyamorous: {
         title: 'Polyamorous',
+        tags: ['q+'],
         layers: [
             {
                 type: 'image',
@@ -43,10 +68,13 @@ export const defaultBadgeData: Record<string, BadgeData> = {
     },
     polyamorousRound: {
         title: "Polyamorous (Shish's Version)",
+        tags: ['q+'],
         layers: [
             {
                 type: 'image',
                 image: 'polyamorous-round.svg',
+                scale: 1.0,
+                offset: [0, 0],
             },
             {
                 type: 'edge-text',
@@ -58,6 +86,7 @@ export const defaultBadgeData: Record<string, BadgeData> = {
     pride: simpleBadge('Pride', 'pride.svg'),
     prideProgress: {
         title: 'Pride Progress',
+        tags: ['q+'],
         layers: [
             {
                 type: 'hflag',
@@ -81,6 +110,7 @@ export const defaultBadgeData: Record<string, BadgeData> = {
     },
     prideProgressIntersex: {
         title: 'Pride Progress Intersex',
+        tags: ['q+'],
         layers: [
             {
                 type: 'hflag',
@@ -104,11 +134,13 @@ export const defaultBadgeData: Record<string, BadgeData> = {
     },
     relationshipAnarchy: {
         title: 'Relationship Anarchy',
+        tags: ['q+'],
         layers: [
             {
                 type: 'image',
                 image: 'relationship-anarchy.png',
                 scale: 1.5,
+                offset: [0, 0],
             },
             {
                 type: 'edge-text',
@@ -118,6 +150,7 @@ export const defaultBadgeData: Record<string, BadgeData> = {
     },
     transgender: {
         title: 'Transgender',
+        tags: ['q+'],
         layers: [
             {
                 type: 'hflag',
@@ -134,29 +167,5 @@ export const defaultBadgeData: Record<string, BadgeData> = {
                 text: 'Transgender',
             },
         ],
-    },
-}
-
-export const defaultPageData = {
-    scale: 1.04,
-    badges: {
-        agender: 1,
-        aromantic: 1,
-        asexual: 1,
-        bisexual: 1,
-        demiromantic: 1,
-        demisexual: 1,
-        genderfluid: 1,
-        genderqueer: 1,
-        intersex: 1,
-        nonbinary: 1,
-        pansexual: 1,
-        polyamorous: 1,
-        polyamorousRound: 1,
-        pride: 1,
-        prideProgress: 1,
-        prideProgressIntersex: 1,
-        relationshipAnarchy: 1,
-        transgender: 1,
     },
 }

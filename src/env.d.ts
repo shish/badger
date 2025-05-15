@@ -1,17 +1,17 @@
 /// <reference types="@rsbuild/core/types" />
 
+type LayerType = 'image' | 'hflag' | 'edge-text'
+
 type LayerData =
     | {
           type: 'image'
           image: string
-          scale?: number
-          offset?: [number, number]
+          scale: number
+          offset: [number, number]
       }
     | {
           type: 'hflag'
           stripes: Array<{ color: string; size: number }>
-          scale?: number
-          offset?: [number, number]
       }
     | {
           type: 'edge-text'
@@ -21,6 +21,7 @@ type LayerData =
 
 interface BadgeData {
     title: string
+    tags: string[]
     layers: LayerData[]
 }
 

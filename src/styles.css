@@ -12,24 +12,35 @@ body {
     @apply bg-gray-50 text-gray-950 dark:bg-gray-900 dark:text-gray-200;
 }
 
+table.zebra>TBODY>TR {
+    @apply odd:bg-gray-50 even:bg-gray-100 odd:dark:bg-gray-700 even:dark:bg-gray-800;
+    TH {
+        @apply text-right;
+    }
+}
+table.layerEditor>TBODY>TR {
+    &>TH, &>TD {
+        vertical-align: top;
+        @apply px-1 py-1;
+    }
+}
+button {
+    @apply bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded
+}
+button.small {
+    @apply py-0 px-1.5
+}
+button.add {
+    @apply bg-green-500 hover:bg-green-700
+}
+button.delete {
+    @apply bg-red-500 hover:bg-red-700
+}
+
 svg {
     display: inline-block;
 }
 
 @page {
-    margin: 1cm !important;
-}
-
-@media screen {
-    .printOnly {
-        display: none;
-    }
-}
-@media print {
-    .screenOnly {
-        display: none;
-    }
-    .badge {
-        margin: 0.5cm;
-    }
+    margin: 5mm !important;
 }

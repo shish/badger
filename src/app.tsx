@@ -3,6 +3,8 @@ import { RouterProvider, createRouter } from '@tanstack/react-router'
 
 import { routeTree } from './routeTree.gen'
 import './styles.css'
+import { ShoppingListProvider } from './providers/shoppinglist'
+import { SettingsProvider } from './providers/settings'
 
 // Set up a Router instance
 const router = createRouter({
@@ -18,7 +20,13 @@ declare module '@tanstack/react-router' {
     }
 }
 const App = () => {
-    return <RouterProvider router={router} />
+    return (
+        <SettingsProvider>
+            <ShoppingListProvider>
+                <RouterProvider router={router} />
+            </ShoppingListProvider>
+        </SettingsProvider>
+    )
 }
 
 export default App

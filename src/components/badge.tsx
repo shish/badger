@@ -1,21 +1,20 @@
-const CANVAS_SIZE = 43
-const CUTTER_SIZE = 41
-const VISIBLE_SIZE = 34
+export const CANVAS_SIZE = 43
+export const CUTTER_SIZE = 41
+export const VISIBLE_SIZE = 34
 
 export function Badge({
     data,
-    showGuides,
-    scale,
+    showGuides = false,
+    scale = 1.0,
 }: {
     data: BadgeData
-    showGuides: boolean
+    showGuides?: boolean
     scale?: number
 }) {
     const w = CANVAS_SIZE
     const h = CANVAS_SIZE
     const cx = w / 2
     const cy = h / 2
-    const myScale = scale ?? 1.0
 
     /*
      * The end goal is to have a white space outside the cutter-circle
@@ -45,8 +44,8 @@ export function Badge({
 
     return (
         <svg
-            width={`${w * myScale}mm`}
-            height={`${h * myScale}mm`}
+            width={`${w * scale}mm`}
+            height={`${h * scale}mm`}
             viewBox={`0 0 ${w} ${h}`}
             xmlns="http://www.w3.org/2000/svg"
             className="badge"
@@ -55,8 +54,8 @@ export function Badge({
             <defs>
                 <circle cx={cx} cy={cy} r={VISIBLE_SIZE / 2} id="edgeBorder" />
             </defs>
-            {data.layers.map((layerData) => (
-                <Layer data={layerData} />
+            {data.layers.map((layerData, n) => (
+                <Layer key={n} data={layerData} />
             ))}
             <g className={'guides'}>
                 <circle
@@ -65,7 +64,7 @@ export function Badge({
                     r={big_r}
                     stroke={showGuides ? '#fffc' : 'white'}
                     className="outsideCutter"
-                    stroke-width={big_r_stroke}
+                    strokeWidth={big_r_stroke}
                     fill="none"
                 />
                 {showGuides && (
@@ -76,7 +75,7 @@ export function Badge({
                             r={small_r}
                             stroke="#fff8"
                             className="badgeSideArea"
-                            stroke-width={small_r_stroke}
+                            strokeWidth={small_r_stroke}
                             fill="none"
                         />
                         <circle
@@ -85,8 +84,8 @@ export function Badge({
                             r={VISIBLE_SIZE / 2}
                             stroke="#0008"
                             className="badgeSideMarker"
-                            stroke-width="0.5"
-                            stroke-dasharray="2,2"
+                            strokeWidth="0.5"
+                            strokeDasharray="2,2"
                             fill="none"
                         />
                     </>
@@ -96,7 +95,7 @@ export function Badge({
                     cy={cy}
                     r={CUTTER_SIZE / 2}
                     stroke="black"
-                    stroke-width="1"
+                    strokeWidth="1"
                     fill="none"
                 />
             </g>
@@ -124,7 +123,7 @@ function Layer({ data }: { data: LayerData }) {
         )
     } else if (data.type == 'hflag') {
         const centre = CANVAS_SIZE / 2
-        const size = CANVAS_SIZE * (data.scale ?? 1.0)
+        const size = CANVAS_SIZE
         const xoff = centre - size / 2
         const yoff = centre - size / 2
 
