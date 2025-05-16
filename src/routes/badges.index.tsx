@@ -1,20 +1,29 @@
 import { Link, createFileRoute } from '@tanstack/react-router'
-import { defaultBadgeData } from '../data'
-import { useRef, useState } from 'react'
+import { useContext, useEffect, useRef, useState } from 'react'
 import { useLocalStorage } from 'usehooks-ts'
 
-import { CANVAS_SIZE } from '../components/badge'
-import { Grid } from '../components/grid'
-import { BadgeGridItem } from '../components/badgegriditem'
+import { CANVAS_SIZE } from '../components/Badge'
+import { Grid } from '../components/Grid'
+import { BadgeGridItem } from '../components/BadgeGridItem'
+import { PocketBaseContext } from '../providers/pocketbase'
+import { RecordModel } from 'pocketbase'
 
 export const Route = createFileRoute('/badges/')({
     component: RouteComponent,
 })
 
 function RouteComponent() {
-    const [badgeData, setBadgeData] =
-        useState<Record<string, BadgeData>>(defaultBadgeData)
+    const [badgeData, setBadgeData] = useState<BadgeData[]>([]);
     const [search, setSearch] = useState('')
+    const { pb, user } = useContext(PocketBaseContext);
+
+    useEffect(() => {
+        pb
+            .collection('badges')
+            .getList<BadgeData>(1, 20)
+            .then((r) => setBadgeData(r.items))
+            .catch((e) => console.log(e));
+    }, []);
 
     return (
         <div className="p-2">
@@ -27,12 +36,12 @@ function RouteComponent() {
                 />
             </label>
             <Grid>
-                {Object.entries(badgeData)
-                    .filter(([id, data]) =>
+                {badgeData
+                    .filter((data) =>
                         data.title.toLowerCase().includes(search.toLowerCase())
                     )
-                    .map(([id, data]) => (
-                        <BadgeGridItem key={id} id={id} data={data} />
+                    .map((data) => (
+                        <BadgeGridItem key={data.id} data={data} />
                     ))}
             </Grid>
         </div>

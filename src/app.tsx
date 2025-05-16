@@ -5,6 +5,7 @@ import { routeTree } from './routeTree.gen'
 import './styles.css'
 import { ShoppingListProvider } from './providers/shoppinglist'
 import { SettingsProvider } from './providers/settings'
+import { PocketBaseProvider } from './providers/pocketbase'
 
 // Set up a Router instance
 const router = createRouter({
@@ -21,11 +22,15 @@ declare module '@tanstack/react-router' {
 }
 const App = () => {
     return (
-        <SettingsProvider>
-            <ShoppingListProvider>
-                <RouterProvider router={router} />
-            </ShoppingListProvider>
-        </SettingsProvider>
+        <React.StrictMode>
+            <PocketBaseProvider url={'/'}>
+                <SettingsProvider>
+                    <ShoppingListProvider>
+                        <RouterProvider router={router} />
+                    </ShoppingListProvider>
+                </SettingsProvider>
+            </PocketBaseProvider>
+        </React.StrictMode>
     )
 }
 

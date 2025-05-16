@@ -3,6 +3,7 @@
 .DS_Store
 *.local
 *.log*
+data/
 
 # Dist
 node_modules

@@ -20,12 +20,10 @@ type LayerData =
       }
 
 interface BadgeData {
+    id: string
+    collectionId: string
     title: string
-    tags: string[]
+    tags: string
+    files: string[]
     layers: LayerData[]
-}
-
-interface PageData {
-    scale: number
-    badges: Record<string, number>
 }

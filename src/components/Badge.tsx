@@ -55,7 +55,7 @@ export function Badge({
                 <circle cx={cx} cy={cy} r={VISIBLE_SIZE / 2} id="edgeBorder" />
             </defs>
             {data.layers.map((layerData, n) => (
-                <Layer key={n} data={layerData} />
+                <Layer key={n} badge={data} data={layerData} />
             ))}
             <g className={'guides'}>
                 <circle
@@ -103,17 +103,28 @@ export function Badge({
     )
 }
 
-function Layer({ data }: { data: LayerData }) {
+function Layer({ badge, data }: { badge: BadgeData, data: LayerData }) {
     if (data.type == 'image') {
         const centre = CANVAS_SIZE / 2
         const size = CANVAS_SIZE * (data.scale ?? 1.0)
         const xoff = centre - size / 2 + (data.offset?.[0] ?? 0)
         const yoff = centre - size / 2 + (data.offset?.[1] ?? 0)
 
+        let image = null;
+        const [base, ext] = data.image.split('.', 2)
+        for(const filename of badge.files) {
+            // data.image is "foo.png", filename is "foo_<random_id>.png",
+            // we need to find the filename that matches the image
+            if(filename.startsWith(base) && filename.endsWith(ext)) {
+                image = filename;
+                break;
+            }
+        }
+
         return (
             <g className="image">
                 <image
-                    href={'/badge-images/' + data.image}
+                    href={`/api/files/${badge.collectionId}/${badge.id}/${image}`}
                     x={xoff}
                     y={yoff}
                     width={size}

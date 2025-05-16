@@ -18,7 +18,7 @@ export const LAYER_DEFAULTS: Record<LayerType, LayerData> = {
         text: 'Hello',
     },
 }
-
+/*
 function simpleBadge(title: string, image: string): BadgeData {
     return {
         title: title,
@@ -169,3 +169,4 @@ export const defaultBadgeData: Record<string, BadgeData> = {
         ],
     },
 }
+*/

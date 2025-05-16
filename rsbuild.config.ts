@@ -18,4 +18,9 @@ export default defineConfig({
         title: 'AutoBadger1000',
         favicon: './src/assets/favicon.svg',
     },
+    server: {
+        proxy: {
+            '/api': 'http://localhost:3030',
+        },
+    },
 })

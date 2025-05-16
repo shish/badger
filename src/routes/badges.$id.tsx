@@ -1,12 +1,13 @@
 import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
-import { defaultBadgeData } from '../data'
-import { useContext, useRef, useState } from 'react'
-import { Badge } from '../components/badge'
+import { useContext, useEffect, useRef, useState } from 'react'
+import { Badge } from '../components/Badge'
 import { ShoppingListContext } from '../providers/shoppinglist'
-import { EditorTable } from '../components/editortable'
-import { LAYER_DEFAULTS } from '../data';
+import { EditorTable } from '../components/EditorTable'
+import { LAYER_DEFAULTS } from '../data'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCross, faPlus, faXmark } from '@fortawesome/free-solid-svg-icons'
+import { faPlus, faXmark } from '@fortawesome/free-solid-svg-icons'
+import { PocketBaseContext } from '../providers/pocketbase'
+import { TagList } from '../components/TagList'
 
 export const Route = createFileRoute('/badges/$id')({
     component: RouteComponent,
@@ -14,116 +15,143 @@ export const Route = createFileRoute('/badges/$id')({
 
 function RouteComponent() {
     const { addBadge } = useContext(ShoppingListContext)
-    const [badgeData, setBadgeData] =
-        useState<Record<string, BadgeData>>(defaultBadgeData)
     const { id } = Route.useParams()
-    const [edit, setEdit] = useState(false)
-    const [data, setData] = useState<BadgeData>(badgeData[id])
+    const [edit, setEdit] = useState(false) // FIXME: if badge is not public, setEdit to true
+    const [data, setData] = useState<BadgeData | null>(null)
     const navigate = useNavigate()
+    const { pb, user } = useContext(PocketBaseContext)
 
+    useEffect(() => {
+        pb.collection('badges')
+            .getOne<BadgeData>(id)
+            .then((d) => setData(d))
+            .catch((e) => console.log(e))
+    }, [])
+
+    function resetBadge() {
+        pb.collection('badges')
+            .getOne<BadgeData>(id)
+            .then((d) => setData(d))
+            .catch((e) => console.log(e))
+    }
+
+    function saveBadge() {
+        if (!data) return
+        pb.collection('badges')
+            .update<BadgeData>(id, { ...data, public: true })
+            .then((d) => setData(d))
+            .catch((e) => console.log(e))
+    }
+
+    function deleteBadge() {
+        pb.collection('badges')
+            .delete(id)
+            .then(() => setData(null))
+            .catch((e) => console.log(e))
+    }
+
+    if (!data) {
+        return <div>Loading...</div>
+    }
+
+    const infoBody = (
+        <tbody>
+            <tr>
+                {edit ? (
+                    <td colSpan={2}>
+                        <button
+                            className="act"
+                            onClick={(e) => {
+                                saveBadge()
+                                setEdit(false)
+                            }}
+                        >
+                            Save
+                        </button>{' '}
+                        <button
+                            className="act"
+                            onClick={(e) => {
+                                resetBadge()
+                                setEdit(false)
+                            }}
+                        >
+                            Cancel
+                        </button>
+                    </td>
+                ) : (
+                    <td colSpan={2}>
+                        <button
+                            className="act"
+                            onClick={(e) => {
+                                addBadge(id)
+                                navigate({ to: '/' })
+                            }}
+                        >
+                            Add to Page
+                        </button>{' '}
+                        <button className="act" onClick={(e) => setEdit(true)}>Edit</button>{' '}
+                        <button
+                            className="act"
+                            onClick={(e) => {
+                                deleteBadge()
+                                navigate({ to: '/' })
+                            }}
+                        >
+                            Delete
+                        </button>
+                    </td>
+                )}
+            </tr>
+            <tr>
+                <th>title</th>
+                <td>
+                    {edit ? (
+                        <input
+                            type="text"
+                            defaultValue={data.title}
+                            onChange={(e) =>
+                                setData({
+                                    ...data,
+                                    title: e.target.value,
+                                })
+                            }
+                        />
+                    ) : (
+                        data.title
+                    )}
+                </td>
+            </tr>
+            <tr>
+                <th>tags</th>
+                <td>
+                    {edit ? (
+                        <input
+                            type="text"
+                            defaultValue={data.tags}
+                            onChange={(e) =>
+                                setData({
+                                    ...data,
+                                    tags: e.target.value,
+                                })
+                            }
+                        />
+                    ) : (
+                        <TagList
+                            tags={data.tags.split(',').map((tag) => tag.trim())}
+                        />
+                    )}
+                </td>
+            </tr>
+            <tr>
+                <td colSpan={2}>
+                    <Badge data={data} scale={2} showGuides={edit} />
+                </td>
+            </tr>
+        </tbody>
+    )
     return (
         <div className="p-2 flex">
-            <div>
-                <table>
-                    <tbody>
-                        <tr>
-                            <th>actions</th>
-                            {edit ? (
-                                <td>
-                                    <button onClick={(e) => setEdit(false)}>
-                                        Save
-                                    </button>
-                                    {' '}
-                                    <button
-                                        onClick={(e) => {
-                                            setData(badgeData[id])
-                                            setEdit(false)
-                                        }}
-                                    >
-                                        Cancel
-                                    </button>
-                                </td>
-                            ) : (
-                                <td>
-                                    <button
-                                        onClick={(e) => {
-                                            addBadge(id)
-                                            navigate({ to: '/' })
-                                        }}
-                                    >
-                                        Add to Page
-                                    </button>
-                                    {' '}
-                                    <button onClick={(e) => setEdit(true)}>
-                                        Edit
-                                    </button>
-                                    {' '}
-                                    <button
-                                        onClick={(e) =>
-                                            alert('Not implemented')
-                                        }
-                                    >
-                                        Delete
-                                    </button>
-                                </td>
-                            )}
-                        </tr>
-                        <tr>
-                            <th>title</th>
-                            <td>
-                                {edit ? (
-                                    <input
-                                        type="text"
-                                        defaultValue={data.title}
-                                        onChange={(e) =>
-                                            setData({
-                                                ...data,
-                                                title: e.target.value,
-                                            })
-                                        }
-                                    />
-                                ) : (
-                                    data.title
-                                )}
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>tags</th>
-                            <td>
-                                {edit ? (
-                                    <input
-                                        type="text"
-                                        defaultValue={data.tags.join(', ')}
-                                        onChange={(e) =>
-                                            setData({
-                                                ...data,
-                                                title: e.target.value,
-                                            })
-                                        }
-                                    />
-                                ) : (
-                                    data.tags.map((tag, i) => [
-                                        i > 0 && ', ',
-                                        <Link
-                                            key={tag}
-                                            to="/badges"
-                                            search={{ tag: tag }}
-                                        >
-                                            {tag}
-                                        </Link>,
-                                    ])
-                                )}
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>preview</th>
-                            <td>
-                                <Badge data={data} scale={2} showGuides={edit} />
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+            <table>{infoBody}</table>
             {edit && <LayerEditor data={data} setData={setData} />}
         </div>
     )
@@ -225,20 +253,24 @@ function LayerEditorImage({
                         }
                     />
                     <br />
-                    <input type="file" accept="image/*" onChange={(e) => {
-                        const file = e.target.files?.[0]
-                        if (file) {
-                            const reader = new FileReader()
-                            reader.onload = (e) => {
-                                // TODO: upload file and return URL
-                                //updateLayer({
-                                //    ...layer,
-                                //    image: e.target.result as string,
-                                //})
+                    <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => {
+                            const file = e.target.files?.[0]
+                            if (file) {
+                                const reader = new FileReader()
+                                reader.onload = (e) => {
+                                    // TODO: upload file and return URL
+                                    //updateLayer({
+                                    //    ...layer,
+                                    //    image: e.target.result as string,
+                                    //})
+                                }
+                                reader.readAsDataURL(file)
                             }
-                            reader.readAsDataURL(file)
-                        }
-                    }} />
+                        }}
+                    />
                 </>
             }
             scale={
@@ -260,10 +292,7 @@ function LayerEditorImage({
                     onChange={(e) =>
                         updateLayer({
                             ...layer,
-                            offset: [
-                                e.target.valueAsNumber,
-                                layer.offset[1],
-                            ],
+                            offset: [e.target.valueAsNumber, layer.offset[1]],
                         })
                     }
                 />
@@ -275,10 +304,7 @@ function LayerEditorImage({
                     onChange={(e) =>
                         updateLayer({
                             ...layer,
-                            offset: [
-                                layer.offset[0],
-                                e.target.valueAsNumber,
-                            ],
+                            offset: [layer.offset[0], e.target.valueAsNumber],
                         })
                     }
                 />
@@ -294,29 +320,31 @@ function LayerEditorEdgeText({
     layer: LayerData & { type: 'edge-text' }
     updateLayer: (layer: LayerData) => void
 }) {
-    return <EditorTable
-        text={
-            <input
-                type="text"
-                defaultValue={layer.text}
-                onChange={(e) =>
-                    updateLayer({ ...layer, text: e.target.value })
-                }
-            />
-        }
-        offset={
-            <input
-                type="number"
-                defaultValue={layer.startOffset}
-                onChange={(e) =>
-                    updateLayer({
-                        ...layer,
-                        startOffset: e.target.valueAsNumber,
-                    })
-                }
-            />
-        }
-    />
+    return (
+        <EditorTable
+            text={
+                <input
+                    type="text"
+                    defaultValue={layer.text}
+                    onChange={(e) =>
+                        updateLayer({ ...layer, text: e.target.value })
+                    }
+                />
+            }
+            offset={
+                <input
+                    type="number"
+                    defaultValue={layer.startOffset}
+                    onChange={(e) =>
+                        updateLayer({
+                            ...layer,
+                            startOffset: e.target.valueAsNumber,
+                        })
+                    }
+                />
+            }
+        />
+    )
 }
 
 function LayerEditorHFlag({
@@ -328,19 +356,27 @@ function LayerEditorHFlag({
 }) {
     return (
         <EditorTable
-            stripes={<input
-                type="text"
-                defaultValue={layer.stripes.map((s) => s.color + ":" + s.size).join(', ')}
-                onChange={(e) =>
-                    updateLayer({
-                        ...layer,
-                        stripes: e.target.value.split(', ').map((color) => ({
-                            color: color.split(":")[0],
-                            size: color.split(":")[1] ? parseFloat(color.split(":")[1]) : 1,
-                        })),
-                    })
-                }
-            />}
+            stripes={
+                <input
+                    type="text"
+                    defaultValue={layer.stripes
+                        .map((s) => s.color + ':' + s.size)
+                        .join(', ')}
+                    onChange={(e) =>
+                        updateLayer({
+                            ...layer,
+                            stripes: e.target.value
+                                .split(', ')
+                                .map((color) => ({
+                                    color: color.split(':')[0],
+                                    size: color.split(':')[1]
+                                        ? parseFloat(color.split(':')[1])
+                                        : 1,
+                                })),
+                        })
+                    }
+                />
+            }
         />
     )
 }

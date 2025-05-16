@@ -1,15 +1,15 @@
 import { useContext } from 'react'
 import { Link } from '@tanstack/react-router'
-import { Badge } from './badge'
+import { Badge } from './Badge'
 import { ShoppingListContext } from '../providers/shoppinglist'
 
-export function BadgeGridItem({ id, data }: { id: string; data: BadgeData }) {
+export function BadgeGridItem({ data }: { data: BadgeData }) {
     const { badges, addBadge, setBadge, removeBadge } =
         useContext(ShoppingListContext)
 
     return (
         <div className="text-black text-center bg-white rounded-lg">
-            <Link to="/badges/$id" params={{ id: id }}>
+            <Link to="/badges/$id" params={{ id: data.id }}>
                 {data.title}
                 <br />
                 <Badge data={data} showGuides={false} scale={1.0} />
@@ -27,11 +27,11 @@ export function BadgeGridItem({ id, data }: { id: string; data: BadgeData }) {
                         textAlign: 'center',
                         lineHeight: '1.5em',
                     }}
-                    onClick={(e) => addBadge(id)}
+                    onClick={(e) => addBadge(data.id)}
                 >
                     +
                 </div>{' '}
-                {badges[id] ?? 0}{' '}
+                {badges[data.id] ?? 0}{' '}
                 <div
                     className="cursor-pointer inline-block"
                     style={{
@@ -43,7 +43,7 @@ export function BadgeGridItem({ id, data }: { id: string; data: BadgeData }) {
                         textAlign: 'center',
                         lineHeight: '1.5em',
                     }}
-                    onClick={(e) => removeBadge(id)}
+                    onClick={(e) => removeBadge(data.id)}
                 >
                     -
                 </div>

@@ -1,4 +1,4 @@
-import { CANVAS_SIZE } from './badge'
+import { CANVAS_SIZE } from './Badge'
 
 export function Grid({
     children,
