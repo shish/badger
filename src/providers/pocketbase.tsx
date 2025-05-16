@@ -16,7 +16,7 @@ const adminData = await pb.admins.authWithPassword('test@example.com', '123456')
 type PocketBaseContextType = {
     pb: PocketBase;
     user: RecordModel|null;
-    register: (name: string, username: string, email: string, password: string, passwordConfirm: string) => void;
+    register: (name: string, email: string, password: string, passwordConfirm: string) => void;
     login: (email: string, password: string) => void;
     logout: () => void;
 };
@@ -24,7 +24,7 @@ type PocketBaseContextType = {
 export const PocketBaseContext = createContext<PocketBaseContextType>({
     pb: new PocketBase('/'),
     user: null,
-    register: (_name: string, _username: string, _email: string, _password: string, _passwordConfirm: string) => {},
+    register: (_name: string, _email: string, _password: string, _passwordConfirm: string) => {},
     login: (_email: string, _password: string) => {},
     logout: () => {},
 });
@@ -33,10 +33,9 @@ export function PocketBaseProvider(props: any) {
     const pb = new PocketBase(props.url);
     const [ user, setUser ] = useState<RecordModel|null>(null);
 
-    function register(name: string, username: string, email: string, password: string, passwordConfirm: string) {
+    function register(name: string, email: string, password: string, passwordConfirm: string) {
         pb.collection('users').create({
             name,
-            username,
             email,
             password,
             passwordConfirm,
