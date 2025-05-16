@@ -1,7 +1,7 @@
-import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
+import { createFileRoute, Link } from '@tanstack/react-router'
 import { useContext, useEffect, useRef, useState } from 'react'
 import { Badge } from '../components/Badge'
-import { ShoppingListContext } from '../providers/shoppinglist'
+import { BasketContext } from '../providers/basket'
 import { EditorTable } from '../components/EditorTable'
 import { LAYER_DEFAULTS } from '../data'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -10,43 +10,40 @@ import { PocketBaseContext } from '../providers/pocketbase'
 import { TagList } from '../components/TagList'
 
 export const Route = createFileRoute('/badges/$id')({
-    component: RouteComponent,
+    loader: async ({ context, params: { id } }) => {
+        return {
+            initBadgeData: await context.pb.collection('badges').getOne<BadgeData>(id)
+        }
+    },
+    component: BadgeViewComponent,
 })
 
-function RouteComponent() {
-    const { addBadge } = useContext(ShoppingListContext)
-    const { id } = Route.useParams()
-    const [edit, setEdit] = useState(false) // FIXME: if badge is not public, setEdit to true
-    const [data, setData] = useState<BadgeData | null>(null)
-    const navigate = useNavigate()
+function BadgeViewComponent() {
+    const { initBadgeData } = Route.useLoaderData();
+    const navigate = Route.useNavigate()
+
+    const { addBadge } = useContext(BasketContext)
     const { pb, user } = useContext(PocketBaseContext)
 
-    useEffect(() => {
-        pb.collection('badges')
-            .getOne<BadgeData>(id)
-            .then((d) => setData(d))
-            .catch((e) => console.log(e))
-    }, [])
+    const [edit, setEdit] = useState(!initBadgeData.public)
+    const [data, setData] = useState<BadgeData>(initBadgeData)
 
     function resetBadge() {
-        pb.collection('badges')
-            .getOne<BadgeData>(id)
-            .then((d) => setData(d))
-            .catch((e) => console.log(e))
+        setData(initBadgeData)
     }
 
     function saveBadge() {
         if (!data) return
         pb.collection('badges')
-            .update<BadgeData>(id, { ...data, public: true })
+            .update<BadgeData>(data.id, { ...data, public: true })
             .then((d) => setData(d))
             .catch((e) => console.log(e))
     }
 
     function deleteBadge() {
         pb.collection('badges')
-            .delete(id)
-            .then(() => setData(null))
+            .delete(data.id)
+            .then(() => navigate({ to: '/' }))
             .catch((e) => console.log(e))
     }
 
@@ -83,7 +80,7 @@ function RouteComponent() {
                         <button
                             className="act"
                             onClick={(e) => {
-                                addBadge(id)
+                                addBadge(data.id)
                                 navigate({ to: '/' })
                             }}
                         >
@@ -94,7 +91,6 @@ function RouteComponent() {
                             className="act"
                             onClick={(e) => {
                                 deleteBadge()
-                                navigate({ to: '/' })
                             }}
                         >
                             Delete

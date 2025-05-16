@@ -1,14 +1,14 @@
 import React from 'react'
 import { useLocalStorage } from 'usehooks-ts'
 
-export interface ShoppingListContextType {
+export interface BasketContextType {
     badges: Record<string, number>
     addBadge: (id: string) => void
     setBadge: (id: string, number: number) => void
     removeBadge: (id: string) => void
 }
 
-export const ShoppingListContext = React.createContext<ShoppingListContextType>(
+export const BasketContext = React.createContext<BasketContextType>(
     {
         badges: {},
         addBadge: (id: string) => {},
@@ -17,9 +17,9 @@ export const ShoppingListContext = React.createContext<ShoppingListContextType>(
     }
 )
 
-export function ShoppingListProvider(props: { children: React.ReactNode }) {
+export function BasketProvider(props: { children: React.ReactNode }) {
     const [badges, setBadges] = useLocalStorage<Record<string, number>>(
-        'shoppingListBadges',
+        'BasketBadges',
         {}
     )
 
@@ -53,7 +53,7 @@ export function ShoppingListProvider(props: { children: React.ReactNode }) {
     }
 
     return (
-        <ShoppingListContext.Provider
+        <BasketContext.Provider
             value={{
                 badges,
                 addBadge,
@@ -62,6 +62,6 @@ export function ShoppingListProvider(props: { children: React.ReactNode }) {
             }}
         >
             {props.children}
-        </ShoppingListContext.Provider>
+        </BasketContext.Provider>
     )
 }

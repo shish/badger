@@ -3,15 +3,20 @@ import { RouterProvider, createRouter } from '@tanstack/react-router'
 
 import { routeTree } from './routeTree.gen'
 import './styles.css'
-import { ShoppingListProvider } from './providers/shoppinglist'
+import { BasketProvider } from './providers/basket'
 import { SettingsProvider } from './providers/settings'
-import { PocketBaseProvider } from './providers/pocketbase'
+import { PocketBaseContext, PocketBaseProvider } from './providers/pocketbase'
+import { useContext } from 'react'
 
 // Set up a Router instance
 const router = createRouter({
     routeTree,
     defaultPreload: 'intent',
     scrollRestoration: true,
+    context: {
+        // @ts-ignore
+        pb: undefined
+    }
 })
 
 // Register things for typesafety
@@ -25,13 +30,17 @@ const App = () => {
         <React.StrictMode>
             <PocketBaseProvider url={'/'}>
                 <SettingsProvider>
-                    <ShoppingListProvider>
-                        <RouterProvider router={router} />
-                    </ShoppingListProvider>
+                    <BasketProvider>
+                        <InnerApp />
+                    </BasketProvider>
                 </SettingsProvider>
             </PocketBaseProvider>
         </React.StrictMode>
     )
 }
 
+function InnerApp() {
+    const { pb, user } = useContext(PocketBaseContext);
+    return <RouterProvider router={router} context={{ pb: pb }} />
+}
 export default App

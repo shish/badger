@@ -1,11 +1,11 @@
 import { useContext } from 'react'
 import { Link } from '@tanstack/react-router'
 import { Badge } from './Badge'
-import { ShoppingListContext } from '../providers/shoppinglist'
+import { BasketContext } from '../providers/basket'
 
 export function BadgeGridItem({ data }: { data: BadgeData }) {
     const { badges, addBadge, setBadge, removeBadge } =
-        useContext(ShoppingListContext)
+        useContext(BasketContext)
 
     return (
         <div className="text-black text-center bg-white rounded-lg">

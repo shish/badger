@@ -1,4 +1,5 @@
 /// <reference types="@rsbuild/core/types" />
+/// <reference types="pocketbase" />
 
 type LayerType = 'image' | 'hflag' | 'edge-text'
 
@@ -23,6 +24,7 @@ interface BadgeData {
     id: string
     collectionId: string
     title: string
+    public: boolean
     tags: string
     files: string[]
     layers: LayerData[]

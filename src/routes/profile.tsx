@@ -3,10 +3,10 @@ import { PocketBaseContext } from '../providers/pocketbase';
 import { useContext } from 'react';
 
 export const Route = createFileRoute('/profile')({
-  component: RouteComponent,
+  component: ProfileComponent,
 })
 
-function RouteComponent() {
+function ProfileComponent() {
     const { pb, user } = useContext(PocketBaseContext);
-  return <div>Hello "/user"!</div>
+    return <pre>{ JSON.stringify(user, null, 2)}</pre>
 }
