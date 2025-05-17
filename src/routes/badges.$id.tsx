@@ -3,23 +3,26 @@ import { useContext, useEffect, useRef, useState } from 'react'
 import { Badge } from '../components/Badge'
 import { BasketContext } from '../providers/basket'
 import { EditorTable } from '../components/EditorTable'
-import { LAYER_DEFAULTS } from '../data'
+import { LAYER_DEFAULTS, getImageUrl } from '../data'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlus, faXmark } from '@fortawesome/free-solid-svg-icons'
 import { PocketBaseContext } from '../providers/pocketbase'
 import { TagList } from '../components/TagList'
+import { Separated } from '../components/Separated'
 
 export const Route = createFileRoute('/badges/$id')({
     loader: async ({ context, params: { id } }) => {
         return {
-            initBadgeData: await context.pb.collection('badges').getOne<BadgeData>(id)
+            initBadgeData: await context.pb
+                .collection('badges')
+                .getOne<BadgeData>(id),
         }
     },
     component: BadgeViewComponent,
 })
 
 function BadgeViewComponent() {
-    const { initBadgeData } = Route.useLoaderData();
+    const { initBadgeData } = Route.useLoaderData()
     const navigate = Route.useNavigate()
 
     const { addBadge } = useContext(BasketContext)
@@ -35,7 +38,7 @@ function BadgeViewComponent() {
     function saveBadge() {
         if (!data) return
         pb.collection('badges')
-            .update<BadgeData>(data.id, { ...data, public: true })
+            .update<BadgeData>(data.id, data)
             .then((d) => setData(d))
             .catch((e) => console.log(e))
     }
@@ -54,49 +57,61 @@ function BadgeViewComponent() {
     const infoBody = (
         <tbody>
             <tr>
-                {edit ? (
-                    <td colSpan={2}>
-                        <button
-                            className="act"
-                            onClick={(e) => {
-                                saveBadge()
-                                setEdit(false)
-                            }}
-                        >
-                            Save
-                        </button>{' '}
-                        <button
-                            className="act"
-                            onClick={(e) => {
-                                resetBadge()
-                                setEdit(false)
-                            }}
-                        >
-                            Cancel
-                        </button>
-                    </td>
-                ) : (
-                    <td colSpan={2}>
-                        <button
-                            className="act"
-                            onClick={(e) => {
-                                addBadge(data.id)
-                                navigate({ to: '/' })
-                            }}
-                        >
-                            Add to Page
-                        </button>{' '}
-                        <button className="act" onClick={(e) => setEdit(true)}>Edit</button>{' '}
-                        <button
-                            className="act"
-                            onClick={(e) => {
-                                deleteBadge()
-                            }}
-                        >
-                            Delete
-                        </button>
-                    </td>
-                )}
+                <td colSpan={2}>
+                    <Separated>
+                        {edit && (
+                            <button
+                                className="act"
+                                onClick={(e) => {
+                                    saveBadge()
+                                    setEdit(false)
+                                }}
+                            >
+                                Save
+                            </button>
+                        )}
+                        {edit && (
+                            <button
+                                className="act"
+                                onClick={(e) => {
+                                    resetBadge()
+                                    setEdit(false)
+                                }}
+                            >
+                                Cancel
+                            </button>
+                        )}
+                        {!edit && (
+                            <button
+                                className="act"
+                                onClick={(e) => {
+                                    addBadge(data.id)
+                                    navigate({ to: '/' })
+                                }}
+                            >
+                                Add to Basket
+                            </button>
+                        )}
+                        {!edit && data.owner == user?.id && (
+                            <button
+                                className="act"
+                                onClick={(e) => setEdit(true)}
+                            >
+                                Edit
+                            </button>
+                        )}
+                        {!edit && data.owner == user?.id && (
+                            <button
+                                className="act"
+                                onClick={(e) => {
+                                    deleteBadge()
+                                }}
+                            >
+                                Delete
+                            </button>
+                        )}
+                    </Separated>
+                </td>
             </tr>
             <tr>
                 <th>title</th>
@@ -135,6 +150,25 @@ function BadgeViewComponent() {
                         <TagList
                             tags={data.tags.split(',').map((tag) => tag.trim())}
                         />
+                    )}
+                </td>
+            </tr>
+            <tr>
+                <th>public</th>
+                <td>
+                    {edit ? (
+                        <input
+                            type="checkbox"
+                            defaultChecked={data.public}
+                            onChange={(e) =>
+                                setData({
+                                    ...data,
+                                    public: e.target.checked,
+                                })
+                            }
+                        />
+                    ) : (
+                        data.public ? "Yes" : "No"
                     )}
                 </td>
             </tr>
@@ -185,6 +219,7 @@ function LayerEditor({
                             <td>
                                 {layer.type === 'image' ? (
                                     <LayerEditorImage
+                                        badge={data}
                                         layer={layer}
                                         updateLayer={(layer) =>
                                             updateLayer(i, layer)
@@ -231,9 +266,11 @@ function LayerEditor({
 }
 
 function LayerEditorImage({
+    badge,
     layer,
     updateLayer,
 }: {
+    badge: BadgeData
     layer: LayerData & { type: 'image' }
     updateLayer: (layer: LayerData) => void
 }) {
@@ -241,29 +278,28 @@ function LayerEditorImage({
         <EditorTable
             file={
                 <>
-                    <input
-                        type="text"
-                        defaultValue={layer.image}
-                        onChange={(e) =>
-                            updateLayer({ ...layer, image: e.target.value })
-                        }
-                    />
-                    <br />
+                    {layer.image.length > 0 && <img className="layerImageThumb" src={getImageUrl(badge, layer.image)} alt="layer" />}
                     <input
                         type="file"
                         accept="image/*"
                         onChange={(e) => {
                             const file = e.target.files?.[0]
                             if (file) {
+                                badge.files.push(file)
+                                updateLayer({
+                                    ...layer,
+                                    image: file.name,
+                                })
+                                /*
                                 const reader = new FileReader()
                                 reader.onload = (e) => {
-                                    // TODO: upload file and return URL
-                                    //updateLayer({
-                                    //    ...layer,
-                                    //    image: e.target.result as string,
-                                    //})
+                                    updateLayer({
+                                        ...layer,
+                                        image: e.target.result as string,
+                                    })
                                 }
                                 reader.readAsDataURL(file)
+                                */
                             }
                         }}
                     />

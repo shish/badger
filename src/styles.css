@@ -47,6 +47,10 @@ button.small {
 svg {
     display: inline-block;
 }
+.layerImageThumb {
+    max-wdith: 5em;
+    max-height: 5em;
+}
 
 @page {
     margin: 5mm !important;

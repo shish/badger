@@ -23,9 +23,12 @@ type LayerData =
 interface BadgeData {
     id: string
     collectionId: string
+    created: string
+    updated: string
+    owner: string
     title: string
     public: boolean
     tags: string
-    files: string[]
+    files: Array<string | File>
     layers: LayerData[]
 }

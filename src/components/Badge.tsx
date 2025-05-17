@@ -1,3 +1,5 @@
+import { getImageUrl } from "../data"
+
 export const CANVAS_SIZE = 43
 export const CUTTER_SIZE = 41
 export const VISIBLE_SIZE = 34
@@ -110,21 +112,10 @@ function Layer({ badge, data }: { badge: BadgeData, data: LayerData }) {
         const xoff = centre - size / 2 + (data.offset?.[0] ?? 0)
         const yoff = centre - size / 2 + (data.offset?.[1] ?? 0)
 
-        let image = null;
-        const [base, ext] = data.image.split('.', 2)
-        for(const filename of badge.files) {
-            // data.image is "foo.png", filename is "foo_<random_id>.png",
-            // we need to find the filename that matches the image
-            if(filename.startsWith(base) && filename.endsWith(ext)) {
-                image = filename;
-                break;
-            }
-        }
-
         return (
             <g className="image">
                 <image
-                    href={`/api/files/${badge.collectionId}/${badge.id}/${image}`}
+                    href={getImageUrl(badge, data.image)}
                     x={xoff}
                     y={yoff}
                     width={size}

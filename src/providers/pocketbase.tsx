@@ -1,18 +1,6 @@
 import { createContext, useState } from 'react'
-import PocketBase, { RecordModel } from 'pocketbase';
+import PocketBase, { LocalAuthStore, RecordModel } from 'pocketbase';
 
-/*
-// list and filter "example" collection records
-const result = await pb.collection('example').getList(1, 20, {
-    filter: 'status = true && created > "2022-08-01 10:00:00"'
-});
-
-// authenticate as auth collection record
-const userData = await pb.collection('users').authWithPassword('test@example.com', '123456');
-
-// or as super-admin
-const adminData = await pb.admins.authWithPassword('test@example.com', '123456');
-*/
 type PocketBaseContextType = {
     pb: PocketBase;
     user: RecordModel|null;
@@ -31,7 +19,7 @@ export const PocketBaseContext = createContext<PocketBaseContextType>({
 
 export function PocketBaseProvider(props: any) {
     const pb = new PocketBase(props.url);
-    const [ user, setUser ] = useState<RecordModel|null>(null);
+    const [ user, setUser ] = useState<RecordModel|null>(pb.authStore.record);
 
     function register(name: string, email: string, password: string, passwordConfirm: string) {
         pb.collection('users').create({

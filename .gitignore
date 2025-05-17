@@ -4,6 +4,7 @@
 *.local
 *.log*
 data/
+badge-images/
 
 # Dist
 node_modules

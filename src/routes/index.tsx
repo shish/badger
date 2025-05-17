@@ -7,7 +7,7 @@ export const Route = createFileRoute('/')({
 function HomeComponent() {
     return (
         <div className="p-2 flex flex-col gap-4">
-            <h1 className="text-2xl font-bold">Welcome to the Badge Printer!</h1>
+            <h1 className="text-2xl font-bold">Welcome to AutoBadger1000!</h1>
             <p>
                 This is a simple web app that allows you to create and print badges.
                 You can add badges to your basket and print them in a grid format.
