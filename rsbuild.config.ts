@@ -15,7 +15,7 @@ export default defineConfig({
         },
     },
     html: {
-        title: 'AutoBadger1000',
+        title: 'AutoBadger2000',
         favicon: './src/assets/favicon.svg',
     },
     server: {
