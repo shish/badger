@@ -442,7 +442,7 @@ function LayerAdder({
     badgeData,
     setBadgeData,
 }: {
-    data: BadgeData
+    badgeData: BadgeData
     setBadgeData: (data: BadgeData) => void
 }) {
     const [type, setType] = useState<LayerType>('image')
