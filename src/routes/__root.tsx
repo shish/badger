@@ -87,8 +87,15 @@ function NewBadgeButton({ user }: {user: any}) {
             .create<BadgeData>({
                 owner: user.id,
                 title: 'New badge!',
-                public: false,
+                public: true,
                 layers: [
+                    {
+                        type: 'image',
+                        image: 'queer.svg',
+                        scale: 1.0,
+                        offset: [0,0]
+                    },
+                    /*
                     {
                         type: 'hflag',
                         stripes: [
@@ -96,13 +103,13 @@ function NewBadgeButton({ user }: {user: any}) {
                             { color: 'green', size: 1 },
                             { color: 'blue', size: 2 },
                         ],
-                    },
+                    },*/
                     {
                         type: 'edge-text',
                         text: 'Hello world',
                     },
                 ],
-                tags: '',
+                tags: ['pride', 'flag'],
                 files: [],
             })
             .then((r) =>

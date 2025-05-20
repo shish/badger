@@ -28,7 +28,7 @@ interface BadgeData {
     owner: string
     title: string
     public: boolean
-    tags: string
+    tags: string[]
     files: Array<string | File>
     layers: LayerData[]
 }

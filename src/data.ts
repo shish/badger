@@ -35,7 +35,8 @@ export function getImageUrl(badge: BadgeData, image: string) {
     // specified (it is sanitised, and has a random string of chars added
     // to the end), but layer.image still contains the original filename,
     // so we need to do some fuzzy matching
-    const [base, ext] = image.split('.', 2)
+    let [base, ext] = image.split('.', 2)
+    base = base.replaceAll('-', '_') + '_'
     const filename = badge.files
         .filter((f) => typeof f === 'string')
         .find((f) => f.startsWith(base) && f.endsWith(ext))

@@ -15,7 +15,7 @@ export const Route = createFileRoute('/badges/$id')({
         return {
             initBadgeData: await context.pb
                 .collection('badges')
-                .getOne<BadgeData>(id),
+                .getOne<BadgeData>(id, { expand: 'tags' }),
         }
     },
     component: BadgeViewComponent,
@@ -31,6 +31,11 @@ function BadgeViewComponent() {
     const [edit, setEdit] = useState(!initBadgeData.public)
     const [data, setData] = useState<BadgeData>(initBadgeData)
 
+    // When clicking "new badge" we get a new initBadgeData
+    useEffect(
+        () => setData(initBadgeData),
+        [initBadgeData]
+    );
     function resetBadge() {
         setData(initBadgeData)
     }
@@ -48,10 +53,6 @@ function BadgeViewComponent() {
             .delete(data.id)
             .then(() => navigate({ to: '/' }))
             .catch((e) => console.log(e))
-    }
-
-    if (!data) {
-        return <div>Loading...</div>
     }
 
     const infoBody = (
@@ -138,17 +139,17 @@ function BadgeViewComponent() {
                     {edit ? (
                         <input
                             type="text"
-                            defaultValue={data.tags}
+                            defaultValue={data.tags.join(", ")}
                             onChange={(e) =>
                                 setData({
                                     ...data,
-                                    tags: e.target.value,
+                                    tags: e.target.value.split(", ").map((tag) => tag.trim()),
                                 })
                             }
                         />
                     ) : (
                         <TagList
-                            tags={data.tags.split(',').map((tag) => tag.trim())}
+                            tags={data.tags}
                         />
                     )}
                 </td>
@@ -258,7 +259,7 @@ function LayerEditor({
                             </td>
                         </tr>
                     ))}
-                    <LayerAdder data={data} setData={setData} />
+                    <LayerAdder badgeData={data} setBadgeData={setData} />
                 </tbody>
             </table>
         </div>
@@ -438,11 +439,11 @@ function LayerEditorJSON({
 }
 
 function LayerAdder({
-    data,
-    setData,
+    badgeData,
+    setBadgeData,
 }: {
     data: BadgeData
-    setData: (data: BadgeData) => void
+    setBadgeData: (data: BadgeData) => void
 }) {
     const [type, setType] = useState<LayerType>('image')
 
@@ -463,9 +464,13 @@ function LayerAdder({
                 <button
                     className="add small"
                     onClick={(e) => {
-                        setData({
-                            ...data,
-                            layers: [...data.layers, LAYER_DEFAULTS[type]],
+                        let defaults = LAYER_DEFAULTS[type];
+                        if(defaults.type == "edge-text") {
+                            defaults.text = badgeData.title
+                        }
+                        setBadgeData({
+                            ...badgeData,
+                            layers: [...badgeData.layers, defaults],
                         })
                     }}
                 >

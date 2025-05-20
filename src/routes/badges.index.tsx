@@ -32,7 +32,7 @@ export const Route = createFileRoute('/badges/')({
     // Load the data
     loader: async ({ context, deps: { page, filter, sort, tag } }) => {
         return {
-            badgeList: (await context.pb.collection('badges').getList<BadgeData>(page, 20)).items
+            badgeList: (await context.pb.collection('badges').getList<BadgeData>(page, 20, {"sort": "title"})).items
         } as {
             badgeList: BadgeData[]
         }
