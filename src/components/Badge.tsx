@@ -148,6 +148,9 @@ function Layer({ badge, data }: { badge: BadgeData, data: LayerData }) {
         })
         return <g className="hflag">{stripes}</g>
     } else if (data.type == 'edge-text') {
+        let text = data.text
+        text = text.replace("$TITLE$", badge.title);
+        text = text.replace("$ID$", badge.id);
         return (
             <text className="edgeText">
                 <textPath
@@ -162,7 +165,7 @@ function Layer({ badge, data }: { badge: BadgeData, data: LayerData }) {
                         strokeWidth="0.5"
                         fontWeight="bold"
                     >
-                        {data.text}
+                        {text}
                     </tspan>
                 </textPath>
                 <textPath
@@ -176,7 +179,7 @@ function Layer({ badge, data }: { badge: BadgeData, data: LayerData }) {
                         fill="white"
                         fontWeight="bold"
                     >
-                        {data.text}
+                        {text}
                     </tspan>
                 </textPath>
             </text>

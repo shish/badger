@@ -106,7 +106,12 @@ function NewBadgeButton({ user }: {user: any}) {
                     },*/
                     {
                         type: 'edge-text',
-                        text: 'Hello world',
+                        text: '$TITLE$',
+                    },
+                    {
+                        type: 'edge-text',
+                        text: 'shish.io',
+                        startOffset: -50,
                     },
                 ],
                 tags: ['pride', 'flag'],
