@@ -1,4 +1,5 @@
 import { getImageUrl } from "../data"
+import { Catcher } from "./Catcher"
 
 export const CANVAS_SIZE = 43
 export const CUTTER_SIZE = 41
@@ -44,7 +45,7 @@ export function Badge({
     const small_r = (CUTTER_SIZE + VISIBLE_SIZE) / 4
     const small_r_stroke = (CUTTER_SIZE - VISIBLE_SIZE) / 2
 
-    return (
+    return <Catcher>
         <svg
             width={`${w * scale}mm`}
             height={`${h * scale}mm`}
@@ -102,7 +103,7 @@ export function Badge({
                 />
             </g>
         </svg>
-    )
+    </Catcher>
 }
 
 function Layer({ badge, data }: { badge: BadgeData, data: LayerData }) {

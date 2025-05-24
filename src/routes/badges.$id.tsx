@@ -1,14 +1,15 @@
-import { createFileRoute, Link } from '@tanstack/react-router'
+import { createFileRoute, Link, CatchBoundary } from '@tanstack/react-router'
 import { useContext, useEffect, useRef, useState } from 'react'
 import { Badge } from '../components/Badge'
 import { BasketContext } from '../providers/basket'
 import { EditorTable } from '../components/EditorTable'
 import { LAYER_DEFAULTS, getImageUrl } from '../data'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPlus, faXmark, faEdit, faCaretUp, faCaretDown, faChevronUp, faChevronDown } from '@fortawesome/free-solid-svg-icons'
+import { faPlus, faXmark, faEdit, faChevronUp, faChevronDown } from '@fortawesome/free-solid-svg-icons'
 import { PocketBaseContext } from '../providers/pocketbase'
 import { TagList } from '../components/TagList'
 import { Separated } from '../components/Separated'
+import { Catcher } from '../components/Catcher'
 
 export const Route = createFileRoute('/badges/$id')({
     loader: async ({ context, params: { id } }) => {
@@ -28,7 +29,7 @@ function BadgeViewComponent() {
     const { addBadge } = useContext(BasketContext)
     const { pb, user } = useContext(PocketBaseContext)
 
-    const [edit, setEdit] = useState(!initBadgeData.public)
+    const [edit, setEdit] = useState(false) // !initBadgeData.public)
     const [badgeData, setBadgeData] = useState<BadgeData>(initBadgeData)
 
     // When clicking "new badge" we get a new initBadgeData
@@ -84,7 +85,7 @@ function BadgeViewComponent() {
                     className="act"
                     onClick={(e) => {
                         addBadge(badgeData.id)
-                        navigate({ to: '/' })
+                        navigate({ to: '/basket' })
                     }}
                 >
                     Add to Basket
@@ -114,16 +115,20 @@ function BadgeViewComponent() {
         <div className="p-2 flex flex-col sm:flex-row">
             <div className="flex flex-col">
                 {buttons}
-                <InfoEditor
-                    badgeData={badgeData}
-                    edit={edit}
-                    setBadgeData={setBadgeData}
-                />
+                <Catcher>
+                    <InfoEditor
+                        badgeData={badgeData}
+                        edit={edit}
+                        setBadgeData={setBadgeData}
+                    />
+                </Catcher>
                 <div className="bg-white border rounded-lg p-2 text-center">
                     <Badge data={badgeData} scale={2} showGuides={edit} />
                 </div>
             </div>
-            {edit && <LayersEditor data={badgeData} setData={setBadgeData} />}
+            <Catcher>
+                {edit && <LayersEditor data={badgeData} setData={setBadgeData} />}
+            </Catcher>
         </div>
     )
 }
@@ -524,35 +529,31 @@ function LayerAdder({
     const [type, setType] = useState<LayerType>('image')
 
     return (
-        <tr>
-            <th>New layer</th>
-            <td>
-                <select
-                    value={type}
-                    onChange={(e) => setType(e.target.value as LayerType)}
-                >
-                    <option value="image">Image</option>
-                    <option value="hflag">Horizontal Flag</option>
-                    <option value="edge-text">Edge Text</option>
-                </select>
-            </td>
-            <td>
-                <button
-                    className="add small"
-                    onClick={(e) => {
-                        let defaults = LAYER_DEFAULTS[type];
-                        if(defaults.type == "edge-text") {
-                            defaults.text = badgeData.title
-                        }
-                        setBadgeData({
-                            ...badgeData,
-                            layers: [...badgeData.layers, defaults],
-                        })
-                    }}
-                >
-                    <FontAwesomeIcon icon={faPlus} />
-                </button>
-            </td>
-        </tr>
+        <div className="flex flex-row items-center gap-2 p-2 border rounded-lg border-green-600 bg-green-950">
+            <div>New&nbsp;layer</div>
+            <select
+                value={type}
+                onChange={(e) => setType(e.target.value as LayerType)}
+            >
+                <option value="image">Image</option>
+                <option value="hflag">Horizontal Flag</option>
+                <option value="edge-text">Edge Text</option>
+            </select>
+            <button
+                className="add small"
+                onClick={(e) => {
+                    let defaults = LAYER_DEFAULTS[type];
+                    if(defaults.type == "edge-text") {
+                        defaults.text = badgeData.title
+                    }
+                    setBadgeData({
+                        ...badgeData,
+                        layers: [...badgeData.layers, defaults],
+                    })
+                }}
+            >
+                <FontAwesomeIcon icon={faPlus} />
+            </button>
+        </div>
     )
 }

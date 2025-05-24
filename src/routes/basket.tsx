@@ -32,7 +32,7 @@ function BasketComponent() {
     const { pb, user } = useContext(PocketBaseContext);
 
     return (
-        <div className="p-2 flex flex-col gap-4">
+        <div className="flex flex-col gap-2 p-2">
             <Controls pageRef={contentRef} />
             <br />
             {/* for editing */}
@@ -81,8 +81,8 @@ function Controls({
     })
 
     return (
-        <div>
-            Scale %:{' '}
+        <div className="flex flex-row gap-2">
+            <div>Scale&nbsp;%</div>
             <input
                 type="number"
                 value={printScale * 100}
@@ -90,8 +90,7 @@ function Controls({
                     setPrintScale(e.target.valueAsNumber / 100)
                 }}
             />
-            <br />
-            <button className="act" onClick={reactToPrintFn}>
+            <button className="act small" onClick={reactToPrintFn}>
                 Print
             </button>
         </div>

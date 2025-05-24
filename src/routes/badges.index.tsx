@@ -49,8 +49,8 @@ function BadgeIndexComponent() {
 
     return (
         <div className="p-2">
-            <label>
-                Search:{' '}
+            <label className="flex flex-row gap-2">
+                <div>Search:</div>
                 <input
                     type="text"
                     value={search}
