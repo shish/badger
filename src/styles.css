@@ -12,23 +12,21 @@ body {
     @apply bg-gray-50 text-gray-950 dark:bg-gray-900 dark:text-gray-200;
 }
 
-table.zebra>TBODY>TR {
-    @apply odd:bg-gray-50 even:bg-gray-100 odd:dark:bg-gray-700 even:dark:bg-gray-800;
-    TH {
-        @apply text-right;
-    }
-}
-table.layerEditor>TBODY>TR {
-    &>TH, &>TD {
-        vertical-align: top;
-        @apply px-1 py-1;
-    }
+INPUT:not([type="checkbox"]):not([type="radio"]),
+TEXTAREA,
+SELECT {
+    @apply w-full;
 }
 
 button.act,
 button.add,
 button.delete {
     @apply text-white font-bold py-2 px-4 rounded
+}
+button.act[disabled],
+button.add[disabled],
+button.delete[disabled] {
+    @apply bg-gray-500 hover:bg-gray-500
 }
 button.act {
     @apply bg-blue-500 hover:bg-blue-700
@@ -46,10 +44,6 @@ button.small {
 
 svg {
     display: inline-block;
-}
-.layerImageThumb {
-    max-width: 5em;
-    max-height: 5em;
 }
 
 @page {
