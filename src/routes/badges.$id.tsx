@@ -16,7 +16,7 @@ export const Route = createFileRoute('/badges/$id')({
         return {
             initBadgeData: await context.pb
                 .collection('badges')
-                .getOne<BadgeData>(id, { expand: 'tags' }),
+                .getOne<BadgeData>(id),
         }
     },
     component: BadgeViewComponent,

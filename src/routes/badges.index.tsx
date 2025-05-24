@@ -1,12 +1,8 @@
-import { Link, createFileRoute } from '@tanstack/react-router'
-import { useContext, useEffect, useRef, useState } from 'react'
-import { useLocalStorage } from 'usehooks-ts'
+import { createFileRoute } from '@tanstack/react-router'
+import { useState } from 'react'
 
-import { CANVAS_SIZE } from '../components/Badge'
 import { Grid } from '../components/Grid'
 import { BadgeGridItem } from '../components/BadgeGridItem'
-import { PocketBaseContext } from '../providers/pocketbase'
-import { RecordModel } from 'pocketbase'
 
 type BadgeSearchSortOptions = 'newest' | 'oldest' | 'price'
 
