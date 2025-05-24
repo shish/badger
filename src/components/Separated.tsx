@@ -6,12 +6,11 @@ export function Separated({
     separator?: React.ReactNode;
 }) : React.ReactNode[] {
     let out = [];
-    for (let i = 0; i < children.length; i++) {
-        if (children[i]) {
-            out.push(children[i]);
-            if (i < children.length - 1) {
-                out.push(separator);
-            }
+    let filteredChildren = children.filter(child => !!child);
+    for (let i = 0; i < filteredChildren.length; i++) {
+        out.push(filteredChildren[i]);
+        if (i < filteredChildren.length - 1) {
+            out.push(separator);
         }
     }
     return out;
