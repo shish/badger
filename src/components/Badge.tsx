@@ -3,7 +3,11 @@ import { Catcher } from "./Catcher"
 
 export const CANVAS_SIZE = 43
 export const CUTTER_SIZE = 41
-export const VISIBLE_SIZE = 34
+export const EDGE_VISIBLE_SIZE = 36
+export const FRONT_VISIBLE_SIZE = 32
+export const CENTRAL_VISIBLE_SIZE = 30
+export const TEXT_SIZE = 1.3
+export const TEXT_OFFSET = 0.60
 
 export function Badge({
     data,
@@ -38,12 +42,11 @@ export function Badge({
     const big_r = (w ** 2 + h ** 2) ** 0.5 / 2
     const big_r_stroke = big_r * 2 - CUTTER_SIZE
     /*
-     * badge "edges" are a circle half way between the visible circle and
-     * the cutter circle, stroked wide enough to cover the gap between
-     * the two
+     * fade out the area between the edge-visible-circle
+     * and the cutter circle
      */
-    const small_r = (CUTTER_SIZE + VISIBLE_SIZE) / 4
-    const small_r_stroke = (CUTTER_SIZE - VISIBLE_SIZE) / 2
+    const small_r = (CUTTER_SIZE + EDGE_VISIBLE_SIZE) / 4
+    const small_r_stroke = (CUTTER_SIZE - EDGE_VISIBLE_SIZE) / 2
 
     return <Catcher>
         <svg
@@ -55,7 +58,7 @@ export function Badge({
             xmlnsXlink="http://www.w3.org/1999/xlink"
         >
             <defs>
-                <circle cx={cx} cy={cy} r={VISIBLE_SIZE / 2} id="edgeBorder" />
+                <circle cx={cx} cy={cy} r={FRONT_VISIBLE_SIZE / 2} id="edgeBorder" />
             </defs>
             {data.layers.map((layerData, n) => (
                 <Layer key={n} badge={data} data={layerData} />
@@ -81,16 +84,9 @@ export function Badge({
                             strokeWidth={small_r_stroke}
                             fill="none"
                         />
-                        <circle
-                            cx={cx}
-                            cy={cy}
-                            r={VISIBLE_SIZE / 2}
-                            stroke="#0008"
-                            className="badgeSideMarker"
-                            strokeWidth="0.5"
-                            strokeDasharray="2,2"
-                            fill="none"
-                        />
+                        <GuideDash cx={cx} cy={cy} r={EDGE_VISIBLE_SIZE/2} />
+                        <GuideDash cx={cx} cy={cy} r={FRONT_VISIBLE_SIZE/2} />
+                        <GuideDash cx={cx} cy={cy} r={CENTRAL_VISIBLE_SIZE/2} />
                     </>
                 )}
                 <circle
@@ -127,7 +123,7 @@ function Layer({ badge, data }: { badge: BadgeData, data: LayerData }) {
     } else if (data.type == 'hflag') {
         const centre = CANVAS_SIZE / 2
         const xsize = CANVAS_SIZE
-        const ysize = VISIBLE_SIZE
+        const ysize = FRONT_VISIBLE_SIZE
         const xoff = centre - xsize / 2
         const yoff = centre - ysize / 2
 
@@ -138,14 +134,14 @@ function Layer({ badge, data }: { badge: BadgeData, data: LayerData }) {
                 x={xoff}
                 y={0}
                 width={xsize}
-                height={(CANVAS_SIZE - VISIBLE_SIZE) / 2}
+                height={(CANVAS_SIZE - FRONT_VISIBLE_SIZE) / 2}
                 fill={data.stripes[0].color}
             />,
             <rect
                 x={xoff}
-                y={CANVAS_SIZE - (CANVAS_SIZE - VISIBLE_SIZE) / 2}
+                y={CANVAS_SIZE - (CANVAS_SIZE - FRONT_VISIBLE_SIZE) / 2}
                 width={xsize}
-                height={(CANVAS_SIZE - VISIBLE_SIZE) / 2}
+                height={(CANVAS_SIZE - FRONT_VISIBLE_SIZE) / 2}
                 fill={data.stripes[data.stripes.length - 1].color}
             />
         ]
@@ -175,8 +171,8 @@ function Layer({ badge, data }: { badge: BadgeData, data: LayerData }) {
                     startOffset={`${75 + (data.startOffset ?? 0)}%`}
                 >
                     <tspan
-                        y="-1"
-                        fontSize="2"
+                        y={-TEXT_OFFSET}
+                        fontSize={TEXT_SIZE}
                         textAnchor="middle"
                         stroke="black"
                         strokeWidth="0.5"
@@ -190,8 +186,8 @@ function Layer({ badge, data }: { badge: BadgeData, data: LayerData }) {
                     startOffset={`${75 + (data.startOffset ?? 0)}%`}
                 >
                     <tspan
-                        y="-1"
-                        fontSize="2"
+                        y={-TEXT_OFFSET}
+                        fontSize={TEXT_SIZE}
                         textAnchor="middle"
                         fill="white"
                         fontWeight="bold"
@@ -203,4 +199,30 @@ function Layer({ badge, data }: { badge: BadgeData, data: LayerData }) {
         )
     }
     return <></>
+}
+
+function GuideDash({
+    cx, cy, r
+}: {
+    cx: number
+    cy: number
+    r: number
+}) {
+    return [
+        { stroke: "#0008", offset: 0 },
+        { stroke: "#FFF8", offset: 2 }
+    ].map(({stroke, offset}, i) => (
+        <circle
+            key={i}
+            cx={cx}
+            cy={cy}
+            r={r}
+            stroke={stroke}
+            className="badgeSideMarker"
+            strokeWidth="0.2"
+            strokeDasharray="2,2"
+            strokeDashoffset={offset}
+            fill="none"
+        />
+    ))
 }
