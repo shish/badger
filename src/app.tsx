@@ -3,8 +3,7 @@ import { RouterProvider, createRouter } from '@tanstack/react-router'
 
 import { routeTree } from './routeTree.gen'
 import './styles.css'
-import { BasketProvider } from './providers/basket'
-import { SettingsProvider } from './providers/settings'
+import { BasketContext, BasketProvider } from './providers/basket'
 import { PocketBaseContext, PocketBaseProvider } from './providers/pocketbase'
 import { useContext } from 'react'
 
@@ -15,7 +14,9 @@ const router = createRouter({
     scrollRestoration: true,
     context: {
         // @ts-ignore
-        pb: undefined
+        pb: undefined,
+        // @ts-ignore
+        basket: undefined,
     }
 })
 
@@ -29,11 +30,9 @@ const App = () => {
     return (
         <React.StrictMode>
             <PocketBaseProvider url={'/'}>
-                <SettingsProvider>
-                    <BasketProvider>
-                        <InnerApp />
-                    </BasketProvider>
-                </SettingsProvider>
+                <BasketProvider>
+                    <InnerApp />
+                </BasketProvider>
             </PocketBaseProvider>
         </React.StrictMode>
     )
@@ -41,6 +40,7 @@ const App = () => {
 
 function InnerApp() {
     const { pb, user } = useContext(PocketBaseContext);
-    return <RouterProvider router={router} context={{ pb: pb }} />
+    const basket = useContext(BasketContext);
+    return <RouterProvider router={router} context={{ pb: pb, basket: basket }} />
 }
 export default App

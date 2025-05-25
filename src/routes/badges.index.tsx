@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { Grid } from '../components/Grid'
 import { BadgeGridItem } from '../components/BadgeGridItem'
@@ -47,9 +47,14 @@ export const Route = createFileRoute('/badges/')({
 
 function BadgeIndexComponent() {
     const { badgeList } = Route.useLoaderData()
-    const [search, setSearch] = useState(Route.useSearch().search || '')
+    const querySearch = Route.useSearch().search || ''
+    const [search, setSearch] = useState(querySearch)
     const [sort, setSort] = useState(Route.useSearch().sort || 'title')
     const navigate = Route.useNavigate()
+
+    useEffect(() => {
+        setSearch(querySearch)
+    }, [querySearch])
 
     function handleSearch(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault()
@@ -73,7 +78,7 @@ function BadgeIndexComponent() {
                 <input
                     id="search"
                     type="text"
-                    defaultValue={search}
+                    value={search}
                     onChange={(e) => setSearch(e.target.value)}
                 />
                 <select

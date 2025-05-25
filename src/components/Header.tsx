@@ -17,7 +17,6 @@ export function Header() {
                 <Link
                     to="/badges"
                     activeProps={aps}
-                    activeOptions={{ exact: true }}
                 >
                     Badge Library
                 </Link>
