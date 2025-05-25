@@ -243,6 +243,7 @@ function LayersEditor({
                     key={i}
                 />
             ))}
+            <div className="flex-1" />
         </div>
     )
 }
@@ -264,7 +265,7 @@ function LayerEditor({
 }) {
     const [ raw, setRaw ] = useState<boolean>(false)
 
-    return <div className="flex-auto border rounded-lg border-green-600 bg-green-950">
+    return <div className="flex-0 border rounded-lg border-green-600 bg-green-950">
         <div className="flex flex-row border-b-2 rounded-t-lg border-green-600 p-2 gap-2 bg-green-900">
             <button
                 className="act small"
@@ -467,30 +468,66 @@ function LayerEditorHFlag({
     layer: LayerData & { type: 'hflag' }
     updateLayer: (layer: LayerData) => void
 }) {
+    const [ stripes, setStripes ] = useState(layer.stripes.length)
     return (
-        <EditorTable
-            stripes={
-                <input
-                    type="text"
-                    defaultValue={layer.stripes
-                        .map((s) => s.color + ':' + s.size)
-                        .join(', ')}
-                    onChange={(e) =>
-                        updateLayer({
-                            ...layer,
-                            stripes: e.target.value
-                                .split(', ')
-                                .map((color) => ({
-                                    color: color.split(':')[0],
-                                    size: color.split(':')[1]
-                                        ? parseFloat(color.split(':')[1])
-                                        : 1,
-                                })),
-                        })
-                    }
-                />
-            }
-        />
+        <>
+            <EditorTable
+                stripes={
+                    <input
+                        type={"number"}
+                        value={layer.stripes.length}
+                        onChange={(e) => {
+                            const newStripes = parseInt(e.target.value)
+                            if (newStripes < 1) return
+                            const currentStripes = layer.stripes.length
+                            if (newStripes > currentStripes) {
+                                const newStripe = { color: 'black', size: 1 }
+                                updateLayer({
+                                    ...layer,
+                                    stripes: [
+                                        ...layer.stripes,
+                                        ...Array(newStripes - currentStripes).fill(newStripe),
+                                    ],
+                                })
+                            } else if (newStripes < currentStripes) {
+                                updateLayer({
+                                    ...layer,
+                                    stripes: layer.stripes.slice(0, newStripes),
+                                })
+                            }
+                        }}
+                    />
+                }
+            />
+            {layer.stripes.map((stripe, i) => (
+                <div key={i} className="flex flex-row gap-2 items-center">
+                    <input
+                        type="color"
+                        value={stripe.color}
+                        onChange={(e) => {
+                            const newStripes = [...layer.stripes]
+                            newStripes[i] = {
+                                ...newStripes[i],
+                                color: e.target.value,
+                            }
+                            updateLayer({ ...layer, stripes: newStripes })
+                        }}
+                    />
+                    <input
+                        type="number"
+                        value={stripe.size}
+                        onChange={(e) => {
+                            const newStripes = [...layer.stripes]
+                            newStripes[i] = {
+                                ...newStripes[i],
+                                size: e.target.valueAsNumber,
+                            }
+                            updateLayer({ ...layer, stripes: newStripes })
+                        }}
+                    />
+                </div>
+            ))}
+        </>
     )
 }
 

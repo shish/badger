@@ -126,21 +126,37 @@ function Layer({ badge, data }: { badge: BadgeData, data: LayerData }) {
         )
     } else if (data.type == 'hflag') {
         const centre = CANVAS_SIZE / 2
-        const size = CANVAS_SIZE
-        const xoff = centre - size / 2
-        const yoff = centre - size / 2
+        const xsize = CANVAS_SIZE
+        const ysize = VISIBLE_SIZE
+        const xoff = centre - xsize / 2
+        const yoff = centre - ysize / 2
 
         const total = data.stripes.reduce((acc, stripe) => acc + stripe.size, 0)
-        const stripeSize = size / total
-        let stripes: React.ReactNode[] = []
+        const stripeSize = ysize / total
+        let stripes: React.ReactNode[] = [
+            <rect
+                x={xoff}
+                y={0}
+                width={xsize}
+                height={(CANVAS_SIZE - VISIBLE_SIZE) / 2}
+                fill={data.stripes[0].color}
+            />,
+            <rect
+                x={xoff}
+                y={CANVAS_SIZE - (CANVAS_SIZE - VISIBLE_SIZE) / 2}
+                width={xsize}
+                height={(CANVAS_SIZE - VISIBLE_SIZE) / 2}
+                fill={data.stripes[data.stripes.length - 1].color}
+            />
+        ]
         let ypos = 0
         data.stripes.forEach((stripe, i) => {
             stripes.push(
                 <rect
                     key={i}
                     x={xoff}
-                    y={yoff + (ypos * size) / total}
-                    width={size}
+                    y={yoff + (ypos * ysize) / total}
+                    width={xsize}
                     height={stripe.size * stripeSize}
                     fill={stripe.color}
                 />
