@@ -46,7 +46,7 @@ export function Header() {
                     Login
                 </Link>}
                 <Link to="/" activeProps={aps}>
-                    Home
+                    About
                 </Link>
             </Separated>
         </div>
