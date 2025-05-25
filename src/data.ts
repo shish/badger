@@ -8,9 +8,9 @@ export const LAYER_DEFAULTS: Record<LayerType, LayerData> = {
     hflag: {
         type: 'hflag',
         stripes: [
-            { color: 'red', size: 1 },
-            { color: 'green', size: 1 },
-            { color: 'blue', size: 1 },
+            { color: '#ff0000', size: 1 },
+            { color: '#00ff00', size: 1 },
+            { color: '#0000ff', size: 1 },
         ],
     },
     'edge-text': {
