@@ -9,7 +9,7 @@ export default defineConfig({
             plugins: [
                 TanStackRouterRspack({
                     target: 'react',
-                    autoCodeSplitting: true,
+                    autoCodeSplitting: false,
                 }),
             ],
         },
