@@ -7,6 +7,7 @@ In prod-mode, the backend will serve static files from `/app/dist`, so that the 
 ## Run backend
 
 ```
+docker build .
 docker run --rm -v $(pwd)/data:/data -p 3030:8000 -t $(docker build -q .)
 ```
 
