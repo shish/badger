@@ -14,10 +14,7 @@ export function Header() {
                 <Link to="/basket" activeProps={aps} activeOptions={{ exact: true }}>
                     Basket
                 </Link>
-                <Link
-                    to="/badges"
-                    activeProps={aps}
-                >
+                <Link to="/badges" activeProps={aps}>
                     Badge Library
                 </Link>
                 {user && (
@@ -64,20 +61,13 @@ function NewBadgeButton({ user }: {user: any}) {
                 public: true,
                 layers: [
                     {
-                        type: 'image',
-                        image: 'queer.svg',
-                        scale: 1.0,
-                        offset: [0,0]
-                    },
-                    /*
-                    {
                         type: 'hflag',
                         stripes: [
-                            { color: 'red', size: 2 },
-                            { color: 'green', size: 1 },
-                            { color: 'blue', size: 2 },
+                            { color: '#ff0000', size: 1 },
+                            { color: '#00ff00', size: 1 },
+                            { color: '#0000ff', size: 1 },
                         ],
-                    },*/
+                    },
                     {
                         type: 'edge-text',
                         text: '$TITLE$',
