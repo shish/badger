@@ -535,18 +535,10 @@ function LayerAdder({
 
     return (
         <div className="flex flex-row items-center gap-2 p-2 border rounded-lg border-green-600 bg-green-950">
-            <div>New&nbsp;layer</div>
             <select
-                value={type}
-                onChange={(e) => setType(e.target.value as LayerType)}
-            >
-                <option value="image">Image</option>
-                <option value="hflag">Horizontal Flag</option>
-                <option value="edge-text">Edge Text</option>
-            </select>
-            <button
-                className="add small"
-                onClick={(e) => {
+                value={""}
+                onChange={(e) => {
+                    let type = e.target.value as LayerType;
                     let defaults = LAYER_DEFAULTS[type];
                     if(defaults.type == "edge-text") {
                         defaults.text = badgeData.title
@@ -555,10 +547,14 @@ function LayerAdder({
                         ...badgeData,
                         layers: [...badgeData.layers, defaults],
                     })
+
                 }}
             >
-                <FontAwesomeIcon icon={faPlus} />
-            </button>
+                <option disabled={true} value="">Add Layer</option>
+                <option value="image">Image</option>
+                <option value="hflag">Horizontal Flag</option>
+                <option value="edge-text">Edge Text</option>
+            </select>
         </div>
     )
 }
