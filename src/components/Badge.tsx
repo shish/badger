@@ -127,7 +127,7 @@ function Layer({ badge, data }: { badge: BadgeData, data: LayerData }) {
         const xoff = centre - xsize / 2
         const yoff = centre - ysize / 2
 
-        const total = data.stripes.reduce((acc, stripe) => acc + stripe.size, 0)
+        const total = data.stripes.length
         const stripeSize = ysize / total
         let stripes: React.ReactNode[] = [
             <rect
@@ -135,29 +135,27 @@ function Layer({ badge, data }: { badge: BadgeData, data: LayerData }) {
                 y={0}
                 width={xsize}
                 height={(CANVAS_SIZE - FRONT_VISIBLE_SIZE) / 2}
-                fill={data.stripes[0].color}
+                fill={data.stripes[0]}
             />,
             <rect
                 x={xoff}
                 y={CANVAS_SIZE - (CANVAS_SIZE - FRONT_VISIBLE_SIZE) / 2}
                 width={xsize}
                 height={(CANVAS_SIZE - FRONT_VISIBLE_SIZE) / 2}
-                fill={data.stripes[data.stripes.length - 1].color}
+                fill={data.stripes[data.stripes.length - 1]}
             />
         ]
-        let ypos = 0
         data.stripes.forEach((stripe, i) => {
             stripes.push(
                 <rect
                     key={i}
                     x={xoff}
-                    y={yoff + (ypos * ysize) / total}
+                    y={yoff + (i * ysize) / total}
                     width={xsize}
-                    height={stripe.size * stripeSize}
-                    fill={stripe.color}
+                    height={stripeSize}
+                    fill={stripe}
                 />
             )
-            ypos += stripe.size
         })
         return <g className="hflag">{stripes}</g>
     } else if (data.type == 'edge-text') {

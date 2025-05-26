@@ -12,7 +12,7 @@ type LayerData =
       }
     | {
           type: 'hflag'
-          stripes: Array<{ color: string; size: number }>
+          stripes: string[]
       }
     | {
           type: 'edge-text'

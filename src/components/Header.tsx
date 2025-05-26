@@ -2,6 +2,7 @@ import { useContext } from "react"
 import { PocketBaseContext } from "../providers/pocketbase"
 import { Link, useNavigate } from "@tanstack/react-router"
 import { Separated } from "./Separated"
+import { LAYER_DEFAULTS } from "../data"
 
 export function Header() {
     const { user, logout } = useContext(PocketBaseContext)
@@ -60,18 +61,8 @@ function NewBadgeButton({ user }: {user: any}) {
                 title: 'New badge!',
                 public: true,
                 layers: [
-                    {
-                        type: 'hflag',
-                        stripes: [
-                            { color: '#ff0000', size: 1 },
-                            { color: '#00ff00', size: 1 },
-                            { color: '#0000ff', size: 1 },
-                        ],
-                    },
-                    {
-                        type: 'edge-text',
-                        text: '$TITLE$',
-                    },
+                    LAYER_DEFAULTS["hflag"],
+                    LAYER_DEFAULTS["edge-text"],
                     {
                         type: 'edge-text',
                         text: 'shish.io',

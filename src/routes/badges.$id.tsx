@@ -503,25 +503,10 @@ function LayerEditorHFlag({
                 <div key={i} className="flex flex-row gap-2 items-center">
                     <input
                         type="color"
-                        value={stripe.color}
+                        value={stripe}
                         onChange={(e) => {
                             const newStripes = [...layer.stripes]
-                            newStripes[i] = {
-                                ...newStripes[i],
-                                color: e.target.value,
-                            }
-                            updateLayer({ ...layer, stripes: newStripes })
-                        }}
-                    />
-                    <input
-                        type="number"
-                        value={stripe.size}
-                        onChange={(e) => {
-                            const newStripes = [...layer.stripes]
-                            newStripes[i] = {
-                                ...newStripes[i],
-                                size: e.target.valueAsNumber,
-                            }
+                            newStripes[i] = e.target.value
                             updateLayer({ ...layer, stripes: newStripes })
                         }}
                     />
