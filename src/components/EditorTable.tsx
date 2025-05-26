@@ -4,7 +4,7 @@ export function EditorTable(items: Record<string, React.ReactNode>) {
             <tbody>
                 {Object.entries(items).map(([key, value]) => (
                     <tr key={key}>
-                        <th>{key}</th>
+                        <th className="w-0 pr-2 text-right">{key}</th>
                         <td>{value}</td>
                     </tr>
                 ))}
