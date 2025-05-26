@@ -142,69 +142,52 @@ function InfoEditor({
     edit: boolean
     setBadgeData: (data: BadgeData) => void
 }) {
-    return <table>
-        <tbody>
-            <tr>
-                <th>title</th>
-                <td>
-                    {edit ? (
-                        <input
-                            type="text"
-                            defaultValue={badgeData.title}
-                            onChange={(e) =>
-                                setBadgeData({
-                                    ...badgeData,
-                                    title: e.target.value,
-                                })
-                            }
-                        />
-                    ) : (
-                        badgeData.title
-                    )}
-                </td>
-            </tr>
-            <tr>
-                <th>tags</th>
-                <td>
-                    {edit ? (
-                        <input
-                            type="text"
-                            defaultValue={badgeData.tags.join(", ")}
-                            onChange={(e) =>
-                                setBadgeData({
-                                    ...badgeData,
-                                    tags: e.target.value.split(", ").map((tag) => tag.trim()),
-                                })
-                            }
-                        />
-                    ) : (
-                        <TagList
-                            tags={badgeData.tags}
-                        />
-                    )}
-                </td>
-            </tr>
-            <tr>
-                <th>public</th>
-                <td>
-                    {edit ? (
-                        <input
-                            type="checkbox"
-                            defaultChecked={badgeData.public}
-                            onChange={(e) =>
-                                setBadgeData({
-                                    ...badgeData,
-                                    public: e.target.checked,
-                                })
-                            }
-                        />
-                    ) : (
-                        badgeData.public ? "Yes" : "No"
-                    )}
-                </td>
-            </tr>
-        </tbody>
-    </table>
+    return <EditorTable
+        title={edit ? (
+            <input
+                type="text"
+                defaultValue={badgeData.title}
+                onChange={(e) =>
+                    setBadgeData({
+                        ...badgeData,
+                        title: e.target.value,
+                    })
+                }
+            />
+        ) : (
+            badgeData.title
+        )}
+        tags={edit ? (
+            <input
+                type="text"
+                defaultValue={badgeData.tags.join(", ")}
+                onChange={(e) =>
+                    setBadgeData({
+                        ...badgeData,
+                        tags: e.target.value.split(", ").map((tag) => tag.trim()),
+                    })
+                }
+            />
+        ) : (
+            <TagList
+                tags={badgeData.tags}
+            />
+        )}
+        public={edit ? (
+            <input
+                type="checkbox"
+                defaultChecked={badgeData.public}
+                onChange={(e) =>
+                    setBadgeData({
+                        ...badgeData,
+                        public: e.target.checked,
+                    })
+                }
+            />
+        ) : (
+            badgeData.public ? "Yes" : "No"
+        )}
+    />
 }
 
 function LayersEditor({
