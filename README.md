@@ -6,12 +6,14 @@ In prod-mode, the backend will serve static files from `/app/dist`, so that the 
 
 ## Run backend
 
-```
+```sh
 docker build .
 docker run --rm -v $(pwd)/data:/data -p 3030:8000 -t $(docker build -q .)
 ```
 
 ## Frontend
 
-- `npm install`
-- `npm run dev`
+```sh
+npm install
+npm run dev
+```
