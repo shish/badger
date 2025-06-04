@@ -5,6 +5,7 @@
 *.log*
 data/
 badge-images/
+public/badge.blend*
 
 # Dist
 node_modules

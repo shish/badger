@@ -12,6 +12,8 @@
         "@fortawesome/fontawesome-svg-core": "^6.7.2",
         "@fortawesome/free-solid-svg-icons": "^6.7.2",
         "@fortawesome/react-fontawesome": "^0.2.2",
+        "@react-three/drei": "^10.1.2",
+        "@react-three/fiber": "^9.1.2",
         "@tanstack/react-router": "^1.120.3",
         "@tanstack/react-router-devtools": "^1.120.3",
         "autoprefixer": "^10.4.20",
@@ -19,7 +21,8 @@
         "react": "^19.0.0",
         "react-dom": "^19.0.0",
         "react-to-print": "^3.1.0",
-        "tailwindcss": "^4.1.8"
+        "tailwindcss": "^4.1.8",
+        "three": "^0.177.0"
     },
     "devDependencies": {
         "@rsbuild/core": "1.2.4",

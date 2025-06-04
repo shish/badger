@@ -1,5 +1,6 @@
 import { createFileRoute, Link, CatchBoundary } from '@tanstack/react-router'
 import { useContext, useEffect, useRef, useState } from 'react'
+import { Badge3D } from '../components/Badge3D'
 import { Badge } from '../components/Badge'
 import { BasketContext } from '../providers/basket'
 import { EditorTable } from '../components/EditorTable'
@@ -29,6 +30,7 @@ function BadgeViewComponent() {
     const { addBadge } = useContext(BasketContext)
     const { pb, user } = useContext(PocketBaseContext)
 
+    const [is3D, set3D] = useState(false)
     const [edit, setEdit] = useState(false) // !initBadgeData.public)
     const [badgeData, setBadgeData] = useState<BadgeData>(initBadgeData)
 
@@ -122,8 +124,23 @@ function BadgeViewComponent() {
                         setBadgeData={setBadgeData}
                     />
                 </Catcher>
-                <div className="bg-white border rounded-lg p-2 text-center">
-                    <Badge data={badgeData} scale={2} showGuides={edit} />
+                <div
+                    className="bg-white border rounded-lg p-2 text-center text-black"
+                    style={{ position: 'relative' }}
+                >
+                    { is3D ? (
+                        <Badge3D data={badgeData} />
+                    ) : (
+                        <Badge data={badgeData} scale={2} showGuides={edit} />
+                    )}
+
+                    {process.env.NODE_ENV === 'development' && (
+                        <button
+                            className="small act"
+                            onClick={(e) => set3D(!is3D)}
+                            style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
+                        >{is3D?"2D":"3D"}</button>
+                    )}
                 </div>
             </div>
             <Catcher>
