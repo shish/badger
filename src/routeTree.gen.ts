@@ -12,7 +12,6 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as ProfileImport } from './routes/profile'
-import { Route as LoginImport } from './routes/login'
 import { Route as BasketImport } from './routes/basket'
 import { Route as IndexImport } from './routes/index'
 import { Route as BadgesIndexImport } from './routes/badges.index'
@@ -23,12 +22,6 @@ import { Route as BadgesIdImport } from './routes/badges.$id'
 const ProfileRoute = ProfileImport.update({
   id: '/profile',
   path: '/profile',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const LoginRoute = LoginImport.update({
-  id: '/login',
-  path: '/login',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -74,13 +67,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BasketImport
       parentRoute: typeof rootRoute
     }
-    '/login': {
-      id: '/login'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof LoginImport
-      parentRoute: typeof rootRoute
-    }
     '/profile': {
       id: '/profile'
       path: '/profile'
@@ -110,7 +96,6 @@ declare module '@tanstack/react-router' {
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/basket': typeof BasketRoute
-  '/login': typeof LoginRoute
   '/profile': typeof ProfileRoute
   '/badges/$id': typeof BadgesIdRoute
   '/badges': typeof BadgesIndexRoute
@@ -119,7 +104,6 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/basket': typeof BasketRoute
-  '/login': typeof LoginRoute
   '/profile': typeof ProfileRoute
   '/badges/$id': typeof BadgesIdRoute
   '/badges': typeof BadgesIndexRoute
@@ -129,7 +113,6 @@ export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
   '/basket': typeof BasketRoute
-  '/login': typeof LoginRoute
   '/profile': typeof ProfileRoute
   '/badges/$id': typeof BadgesIdRoute
   '/badges/': typeof BadgesIndexRoute
@@ -137,24 +120,16 @@ export interface FileRoutesById {
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/basket' | '/login' | '/profile' | '/badges/$id' | '/badges'
+  fullPaths: '/' | '/basket' | '/profile' | '/badges/$id' | '/badges'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/basket' | '/login' | '/profile' | '/badges/$id' | '/badges'
-  id:
-    | '__root__'
-    | '/'
-    | '/basket'
-    | '/login'
-    | '/profile'
-    | '/badges/$id'
-    | '/badges/'
+  to: '/' | '/basket' | '/profile' | '/badges/$id' | '/badges'
+  id: '__root__' | '/' | '/basket' | '/profile' | '/badges/$id' | '/badges/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   BasketRoute: typeof BasketRoute
-  LoginRoute: typeof LoginRoute
   ProfileRoute: typeof ProfileRoute
   BadgesIdRoute: typeof BadgesIdRoute
   BadgesIndexRoute: typeof BadgesIndexRoute
@@ -163,7 +138,6 @@ export interface RootRouteChildren {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   BasketRoute: BasketRoute,
-  LoginRoute: LoginRoute,
   ProfileRoute: ProfileRoute,
   BadgesIdRoute: BadgesIdRoute,
   BadgesIndexRoute: BadgesIndexRoute,
@@ -181,7 +155,6 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/basket",
-        "/login",
         "/profile",
         "/badges/$id",
         "/badges/"
@@ -192,9 +165,6 @@ export const routeTree = rootRoute
     },
     "/basket": {
       "filePath": "basket.tsx"
-    },
-    "/login": {
-      "filePath": "login.tsx"
     },
     "/profile": {
       "filePath": "profile.tsx"

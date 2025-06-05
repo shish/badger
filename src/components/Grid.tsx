@@ -13,7 +13,7 @@ export function Grid({
         <div
             style={{
                 display: "grid",
-                gridTemplateColumns: `repeat(auto-fill, ${CANVAS_SIZE * scale}mm)`,
+                gridTemplateColumns: `repeat(auto-fill, minmax(${CANVAS_SIZE * scale}mm, 1fr))`,
                 gridAutoFlow: "row",
                 gap: gap,
             }}

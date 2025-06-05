@@ -21,7 +21,7 @@ export function Header() {
                         Basket
                     </Link>
                     <Link to="/badges" activeProps={aps}>
-                        Badge Library
+                        Library
                     </Link>
                     {user && <NewBadgeButton user={user} />}
                 </Separated>
@@ -31,11 +31,9 @@ export function Header() {
 
             <div className="flex-row">
                 <Separated separator=" | ">
-                    {user && (
-                        <Link to="/profile" activeProps={aps}>
-                            Profile
-                        </Link>
-                    )}
+                    <Link to="/profile" activeProps={aps}>
+                        {user ? "Profile" : "Login"}
+                    </Link>
                     {user && (
                         <button
                             onClick={() => {
@@ -45,11 +43,6 @@ export function Header() {
                         >
                             Logout
                         </button>
-                    )}
-                    {!user && (
-                        <Link to="/login" activeProps={aps}>
-                            Login
-                        </Link>
                     )}
                     <Link to="/" activeProps={aps}>
                         About
@@ -90,5 +83,5 @@ function NewBadgeButton({ user }: { user: any }) {
             );
     }
 
-    return <button onClick={() => newBadge()}>New Badge</button>;
+    return <button onClick={() => newBadge()}>Create</button>;
 }
