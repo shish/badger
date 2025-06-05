@@ -520,6 +520,7 @@ function LayerEditorHFlag({
                     <input
                         type="color"
                         value={stripe}
+                        className="w-full"
                         onChange={(e) => {
                             const newStripes = [...layer.stripes];
                             newStripes[i] = e.target.value;
@@ -570,6 +571,7 @@ function LayerAdder({
         <div className="flex flex-row items-center gap-2 p-2 border rounded-lg border-green-600 bg-green-950">
             <select
                 value={""}
+                className="w-full"
                 onChange={(e) => {
                     let type = e.target.value as LayerType;
                     let defaults = LAYER_DEFAULTS[type];

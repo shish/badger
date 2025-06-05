@@ -10,10 +10,27 @@ body {
     @apply bg-gray-900 text-gray-200;
 }
 
-INPUT:not([type="checkbox"]):not([type="radio"]),
-TEXTAREA,
-SELECT {
+TD {
+    INPUT:not([type="checkbox"]):not([type="radio"]),
+    TEXTAREA,
+    SELECT,
+    BUTTON {
+        @apply w-full;
+    }
+}
+
+TABLE.form {
     @apply w-full;
+    TH {
+        text-align: right;
+        padding-right: .5em;
+        width: 1em;
+        white-space: nowrap;
+    }
+}
+INPUT,
+SELECT {
+    @apply bg-gray-800 text-gray-200 border-gray-700;
 }
 
 button.act,

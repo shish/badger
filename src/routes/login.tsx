@@ -33,10 +33,11 @@ function LoginBox() {
                 loginAndRedirect();
             }}
         >
-            <table>
+            <p>Login with Email:</p>
+            <table className="form">
                 <tbody>
                     <tr>
-                        <td>Email</td>
+                        <th>Email</th>
                         <td>
                             <input
                                 type="email"
@@ -46,7 +47,7 @@ function LoginBox() {
                         </td>
                     </tr>
                     <tr>
-                        <td>Password</td>
+                        <th>Password</th>
                         <td>
                             <input
                                 type="password"
@@ -91,10 +92,11 @@ function RegisterBox() {
                 registerAndRedirect();
             }}
         >
-            <table>
+            <p>Register with Email:</p>
+            <table className="form">
                 <tbody>
                     <tr>
-                        <td>Email</td>
+                        <th>Email</th>
                         <td>
                             <input
                                 type="email"
@@ -104,7 +106,7 @@ function RegisterBox() {
                         </td>
                     </tr>
                     <tr>
-                        <td>Name</td>
+                        <th>Name</th>
                         <td>
                             <input
                                 type="text"
@@ -114,7 +116,7 @@ function RegisterBox() {
                         </td>
                     </tr>
                     <tr>
-                        <td>Password</td>
+                        <th>Password</th>
                         <td>
                             <input
                                 type="password"
@@ -124,7 +126,7 @@ function RegisterBox() {
                         </td>
                     </tr>
                     <tr>
-                        <td>Password Confirm</td>
+                        <th>Password Confirm</th>
                         <td>
                             <input
                                 type="password"

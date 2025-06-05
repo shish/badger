@@ -80,6 +80,7 @@ function BadgeIndexComponent() {
                 <input
                     id="search"
                     type="text"
+                    className="w-full"
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                 />
