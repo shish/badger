@@ -1,24 +1,24 @@
-import { CANVAS_SIZE } from './Badge'
+import { CANVAS_SIZE } from "./Badge";
 
 export function Grid({
     children,
-    gap = '.5em',
+    gap = ".5em",
     scale = 1.0,
 }: {
-    children: React.ReactNode
-    gap?: string
-    scale?: number
+    children: React.ReactNode;
+    gap?: string;
+    scale?: number;
 }) {
     return (
         <div
             style={{
-                display: 'grid',
+                display: "grid",
                 gridTemplateColumns: `repeat(auto-fill, ${CANVAS_SIZE * scale}mm)`,
-                gridAutoFlow: 'row',
+                gridAutoFlow: "row",
                 gap: gap,
             }}
         >
             {children}
         </div>
-    )
+    );
 }

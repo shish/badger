@@ -1,6 +1,6 @@
-import { defineConfig } from '@rsbuild/core'
-import { pluginReact } from '@rsbuild/plugin-react'
-import { TanStackRouterRspack } from '@tanstack/router-plugin/rspack'
+import { defineConfig } from "@rsbuild/core";
+import { pluginReact } from "@rsbuild/plugin-react";
+import { TanStackRouterRspack } from "@tanstack/router-plugin/rspack";
 
 export default defineConfig({
     plugins: [pluginReact()],
@@ -8,19 +8,19 @@ export default defineConfig({
         rspack: {
             plugins: [
                 TanStackRouterRspack({
-                    target: 'react',
+                    target: "react",
                     autoCodeSplitting: false,
                 }),
             ],
         },
     },
     html: {
-        title: 'AutoBadger2000',
-        favicon: './src/assets/favicon.svg',
+        title: "AutoBadger2000",
+        favicon: "./src/assets/favicon.svg",
     },
     server: {
         proxy: {
-            '/api': 'http://localhost:3030',
+            "/api": "http://localhost:3030",
         },
     },
-})
+});

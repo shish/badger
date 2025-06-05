@@ -10,5 +10,5 @@ export function EditorTable(items: Record<string, React.ReactNode>) {
                 ))}
             </tbody>
         </table>
-    )
+    );
 }

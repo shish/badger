@@ -1,19 +1,19 @@
 export const LAYER_DEFAULTS: Record<LayerType, LayerData> = {
     image: {
-        type: 'image',
-        image: '',
+        type: "image",
+        image: "",
         scale: 1.0,
         offset: [0, 0],
     },
     hflag: {
-        type: 'hflag',
-        stripes: ['#ff0000', '#00ff00', '#0000ff'],
+        type: "hflag",
+        stripes: ["#ff0000", "#00ff00", "#0000ff"],
     },
-    'edge-text': {
-        type: 'edge-text',
-        text: 'Hello',
+    "edge-text": {
+        type: "edge-text",
+        text: "Hello",
     },
-}
+};
 
 export function getImageUrl(badge: BadgeData, image: string) {
     // When we first pick an image but haven't saved it, badge.files
@@ -21,9 +21,9 @@ export function getImageUrl(badge: BadgeData, image: string) {
     // name of the file
     const file = badge.files
         .filter((f) => f instanceof File)
-        .find((f) => f.name === image)
+        .find((f) => f.name === image);
     if (file) {
-        return URL.createObjectURL(file)
+        return URL.createObjectURL(file);
     }
 
     // After uploading, badge.files will contain the filename of the
@@ -31,12 +31,12 @@ export function getImageUrl(badge: BadgeData, image: string) {
     // specified (it is sanitised, and has a random string of chars added
     // to the end), but layer.image still contains the original filename,
     // so we need to do some fuzzy matching
-    let [base, ext] = image.split('.', 2)
-    base = base.replaceAll('-', '_') + '_'
+    let [base, ext] = image.split(".", 2);
+    base = base.replaceAll("-", "_") + "_";
     const filename = badge.files
-        .filter((f) => typeof f === 'string')
-        .find((f) => f.startsWith(base) && f.endsWith(ext))
-    return `/api/files/${badge.collectionId}/${badge.id}/${filename}`
+        .filter((f) => typeof f === "string")
+        .find((f) => f.startsWith(base) && f.endsWith(ext));
+    return `/api/files/${badge.collectionId}/${badge.id}/${filename}`;
 }
 
 /*

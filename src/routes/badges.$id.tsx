@@ -1,118 +1,120 @@
-import { createFileRoute, Link, CatchBoundary } from '@tanstack/react-router'
-import { useContext, useEffect, useRef, useState } from 'react'
-import { Badge3D } from '../components/Badge3D'
-import { Badge } from '../components/Badge'
-import { BasketContext } from '../providers/basket'
-import { EditorTable } from '../components/EditorTable'
-import { LAYER_DEFAULTS, getImageUrl } from '../data'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPlus, faXmark, faEdit, faChevronUp, faChevronDown } from '@fortawesome/free-solid-svg-icons'
-import { PocketBaseContext } from '../providers/pocketbase'
-import { TagList } from '../components/TagList'
-import { Separated } from '../components/Separated'
-import { Catcher } from '../components/Catcher'
+import { createFileRoute, Link, CatchBoundary } from "@tanstack/react-router";
+import { useContext, useEffect, useRef, useState, lazy } from "react";
+import { Badge } from "../components/Badge";
+import { BasketContext } from "../providers/basket";
+import { EditorTable } from "../components/EditorTable";
+import { LAYER_DEFAULTS, getImageUrl } from "../data";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+    faXmark,
+    faEdit,
+    faChevronUp,
+    faChevronDown,
+} from "@fortawesome/free-solid-svg-icons";
+import { PocketBaseContext } from "../providers/pocketbase";
+import { TagList } from "../components/TagList";
+import { Separated } from "../components/Separated";
+import { Catcher } from "../components/Catcher";
 
-export const Route = createFileRoute('/badges/$id')({
+const Badge3D = lazy(() => import("../components/Badge3D"));
+
+export const Route = createFileRoute("/badges/$id")({
     loader: async ({ context, params: { id } }) => {
         return {
             initBadgeData: await context.pb
-                .collection('badges')
+                .collection("badges")
                 .getOne<BadgeData>(id),
-        }
+        };
     },
     component: BadgeViewComponent,
-})
+});
 
 function BadgeViewComponent() {
-    const { initBadgeData } = Route.useLoaderData()
-    const navigate = Route.useNavigate()
+    const { initBadgeData } = Route.useLoaderData();
+    const navigate = Route.useNavigate();
 
-    const { addBadge } = useContext(BasketContext)
-    const { pb, user } = useContext(PocketBaseContext)
+    const { addBadge } = useContext(BasketContext);
+    const { pb, user } = useContext(PocketBaseContext);
 
-    const [is3D, set3D] = useState(false)
-    const [edit, setEdit] = useState(false) // !initBadgeData.public)
-    const [badgeData, setBadgeData] = useState<BadgeData>(initBadgeData)
+    const [is3D, set3D] = useState(false);
+    const [edit, setEdit] = useState(false); // !initBadgeData.public)
+    const [badgeData, setBadgeData] = useState<BadgeData>(initBadgeData);
 
     // When clicking "new badge" we get a new initBadgeData
-    useEffect(
-        () => setBadgeData(initBadgeData),
-        [initBadgeData]
-    );
+    useEffect(() => setBadgeData(initBadgeData), [initBadgeData]);
     function resetBadge() {
-        setBadgeData(initBadgeData)
+        setBadgeData(initBadgeData);
     }
 
     function saveBadge() {
-        if (!badgeData) return
-        pb.collection('badges')
+        if (!badgeData) return;
+        pb.collection("badges")
             .update<BadgeData>(badgeData.id, badgeData)
             .then((d) => setBadgeData(d))
-            .catch((e) => console.log(e))
+            .catch((e) => console.log(e));
     }
 
     function deleteBadge() {
-        pb.collection('badges')
+        pb.collection("badges")
             .delete(badgeData.id)
-            .then(() => navigate({ to: '/' }))
-            .catch((e) => console.log(e))
+            .then(() => navigate({ to: "/" }))
+            .catch((e) => console.log(e));
     }
 
-    const buttons = <div>
-        <Separated>
-            {edit && (
-                <button
-                    className="act"
-                    onClick={(e) => {
-                        saveBadge()
-                        setEdit(false)
-                    }}
-                >
-                    Save
-                </button>
-            )}
-            {edit && (
-                <button
-                    className="act"
-                    onClick={(e) => {
-                        resetBadge()
-                        setEdit(false)
-                    }}
-                >
-                    Cancel
-                </button>
-            )}
-            {!edit && (
-                <button
-                    className="act"
-                    onClick={(e) => {
-                        addBadge(badgeData.id)
-                        navigate({ to: '/basket' })
-                    }}
-                >
-                    Add to Basket
-                </button>
-            )}
-            {!edit && badgeData.owner == user?.id && (
-                <button
-                    className="act"
-                    onClick={(e) => setEdit(true)}
-                >
-                    Edit
-                </button>
-            )}
-            {!edit && badgeData.owner == user?.id && (
-                <button
-                    className="act"
-                    onClick={(e) => {
-                        deleteBadge()
-                    }}
-                >
-                    Delete
-                </button>
-            )}
-        </Separated>
-    </div >;
+    const buttons = (
+        <div>
+            <Separated>
+                {edit && (
+                    <button
+                        className="act"
+                        onClick={(e) => {
+                            saveBadge();
+                            setEdit(false);
+                        }}
+                    >
+                        Save
+                    </button>
+                )}
+                {edit && (
+                    <button
+                        className="act"
+                        onClick={(e) => {
+                            resetBadge();
+                            setEdit(false);
+                        }}
+                    >
+                        Cancel
+                    </button>
+                )}
+                {!edit && (
+                    <button
+                        className="act"
+                        onClick={(e) => {
+                            addBadge(badgeData.id);
+                            navigate({ to: "/basket" });
+                        }}
+                    >
+                        Add to Basket
+                    </button>
+                )}
+                {!edit && badgeData.owner == user?.id && (
+                    <button className="act" onClick={(e) => setEdit(true)}>
+                        Edit
+                    </button>
+                )}
+                {!edit && badgeData.owner == user?.id && (
+                    <button
+                        className="act"
+                        onClick={(e) => {
+                            deleteBadge();
+                        }}
+                    >
+                        Delete
+                    </button>
+                )}
+            </Separated>
+        </div>
+    );
     return (
         <div className="p-2 flex flex-col sm:flex-row">
             <div className="flex flex-col">
@@ -126,28 +128,36 @@ function BadgeViewComponent() {
                 </Catcher>
                 <div
                     className="bg-white border rounded-lg p-2 text-center text-black"
-                    style={{ position: 'relative' }}
+                    style={{ position: "relative" }}
                 >
-                    { is3D ? (
+                    {is3D ? (
                         <Badge3D data={badgeData} />
                     ) : (
                         <Badge data={badgeData} scale={2} showGuides={edit} />
                     )}
 
-                    {process.env.NODE_ENV === 'development' && (
+                    {process.env.NODE_ENV === "development" && (
                         <button
                             className="small act"
                             onClick={(e) => set3D(!is3D)}
-                            style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
-                        >{is3D?"2D":"3D"}</button>
+                            style={{
+                                position: "absolute",
+                                top: "0.5rem",
+                                right: "0.5rem",
+                            }}
+                        >
+                            {is3D ? "2D" : "3D"}
+                        </button>
                     )}
                 </div>
             </div>
             <Catcher>
-                {edit && <LayersEditor data={badgeData} setData={setBadgeData} />}
+                {edit && (
+                    <LayersEditor data={badgeData} setData={setBadgeData} />
+                )}
             </Catcher>
         </div>
-    )
+    );
 }
 
 function InfoEditor({
@@ -155,78 +165,88 @@ function InfoEditor({
     edit,
     setBadgeData,
 }: {
-    badgeData: BadgeData
-    edit: boolean
-    setBadgeData: (data: BadgeData) => void
+    badgeData: BadgeData;
+    edit: boolean;
+    setBadgeData: (data: BadgeData) => void;
 }) {
-    return <EditorTable
-        title={edit ? (
-            <input
-                type="text"
-                defaultValue={badgeData.title}
-                onChange={(e) =>
-                    setBadgeData({
-                        ...badgeData,
-                        title: e.target.value,
-                    })
-                }
-            />
-        ) : (
-            badgeData.title
-        )}
-        tags={edit ? (
-            <input
-                type="text"
-                defaultValue={badgeData.tags.join(", ")}
-                onChange={(e) =>
-                    setBadgeData({
-                        ...badgeData,
-                        tags: e.target.value.split(", ").map((tag) => tag.trim()),
-                    })
-                }
-            />
-        ) : (
-            <TagList
-                tags={badgeData.tags}
-            />
-        )}
-        public={edit ? (
-            <input
-                type="checkbox"
-                defaultChecked={badgeData.public}
-                onChange={(e) =>
-                    setBadgeData({
-                        ...badgeData,
-                        public: e.target.checked,
-                    })
-                }
-            />
-        ) : (
-            badgeData.public ? "Yes" : "No"
-        )}
-    />
+    return (
+        <EditorTable
+            title={
+                edit ? (
+                    <input
+                        type="text"
+                        defaultValue={badgeData.title}
+                        onChange={(e) =>
+                            setBadgeData({
+                                ...badgeData,
+                                title: e.target.value,
+                            })
+                        }
+                    />
+                ) : (
+                    badgeData.title
+                )
+            }
+            tags={
+                edit ? (
+                    <input
+                        type="text"
+                        defaultValue={badgeData.tags.join(", ")}
+                        onChange={(e) =>
+                            setBadgeData({
+                                ...badgeData,
+                                tags: e.target.value
+                                    .split(", ")
+                                    .map((tag) => tag.trim()),
+                            })
+                        }
+                    />
+                ) : (
+                    <TagList tags={badgeData.tags} />
+                )
+            }
+            public={
+                edit ? (
+                    <input
+                        type="checkbox"
+                        defaultChecked={badgeData.public}
+                        onChange={(e) =>
+                            setBadgeData({
+                                ...badgeData,
+                                public: e.target.checked,
+                            })
+                        }
+                    />
+                ) : badgeData.public ? (
+                    "Yes"
+                ) : (
+                    "No"
+                )
+            }
+        />
+    );
 }
 
 function LayersEditor({
     data,
     setData,
 }: {
-    data: BadgeData
-    setData: (data: BadgeData) => void
+    data: BadgeData;
+    setData: (data: BadgeData) => void;
 }) {
     function updateLayer(n: number, layer: LayerData): void {
-        const newLayers = data.layers.map((l, i) => (i === n ? layer : l))
+        const newLayers = data.layers.map((l, i) => (i === n ? layer : l));
         setData({
             ...data,
             layers: newLayers,
-        })
+        });
     }
     function deleteLayer(n: number): void {
-        const newLayers = data.layers.filter((_, i) => i !== n)
+        const newLayers = data.layers.filter((_, i) => i !== n);
         setData({
             ...data,
             layers: newLayers,
-        })
+        });
     }
 
     return (
@@ -245,7 +265,7 @@ function LayersEditor({
             ))}
             <div className="flex-1" />
         </div>
-    )
+    );
 }
 
 function LayerEditor({
@@ -254,107 +274,95 @@ function LayerEditor({
     layer,
     updateLayer,
     deleteLayer,
-    i
-} : {
-    data: BadgeData
-    setData: (data: BadgeData) => void
-    layer: LayerData
-    updateLayer: (n: number, layer: LayerData) => void
-    deleteLayer: (n: number) => void
-    i: number
+    i,
+}: {
+    data: BadgeData;
+    setData: (data: BadgeData) => void;
+    layer: LayerData;
+    updateLayer: (n: number, layer: LayerData) => void;
+    deleteLayer: (n: number) => void;
+    i: number;
 }) {
-    const [ raw, setRaw ] = useState<boolean>(false)
+    const [raw, setRaw] = useState<boolean>(false);
 
-    return <div className="flex-0 border rounded-lg border-green-600 bg-green-950">
-        <div className="flex flex-row border-b-2 rounded-t-lg border-green-600 p-2 gap-2 bg-green-900">
-            <button
-                className="act small"
-                disabled={i <= 0}
-                onClick={(e) =>
-                    setData({
-                        ...data,
-                        layers: [
-                            ...data.layers.slice(0, i - 1),
-                            data.layers[i],
-                            data.layers[i - 1],
-                            ...data.layers.slice(i + 1),
-                        ],
-                    })
-                }
-            >
-                <FontAwesomeIcon icon={faChevronUp} />
-            </button>
-            <button
-                className="act small"
-                disabled={i >= data.layers.length - 1}
-                onClick={(e) =>
-                    setData({
-                        ...data,
-                        layers: [
-                            ...data.layers.slice(0, i),
-                            data.layers[i + 1],
-                            data.layers[i],
-                            ...data.layers.slice(i + 2),
-                        ],
-                    })
-                }
-            >
-                <FontAwesomeIcon icon={faChevronDown} />
-            </button>
-            <div>{layer.type}</div>
-            <div className="flex-1" />
-            <button
-                className="act small"
-                onClick={(e) => setRaw(!raw)}
-            >
-                <FontAwesomeIcon icon={faEdit} />
-            </button>
-            <button
-                className="delete small"
-                onClick={(e) => deleteLayer(i)}
-            >
-                <FontAwesomeIcon icon={faXmark} />
-            </button>
+    return (
+        <div className="flex-0 border rounded-lg border-green-600 bg-green-950">
+            <div className="flex flex-row border-b-2 rounded-t-lg border-green-600 p-2 gap-2 bg-green-900">
+                <button
+                    className="act small"
+                    disabled={i <= 0}
+                    onClick={(e) =>
+                        setData({
+                            ...data,
+                            layers: [
+                                ...data.layers.slice(0, i - 1),
+                                data.layers[i],
+                                data.layers[i - 1],
+                                ...data.layers.slice(i + 1),
+                            ],
+                        })
+                    }
+                >
+                    <FontAwesomeIcon icon={faChevronUp} />
+                </button>
+                <button
+                    className="act small"
+                    disabled={i >= data.layers.length - 1}
+                    onClick={(e) =>
+                        setData({
+                            ...data,
+                            layers: [
+                                ...data.layers.slice(0, i),
+                                data.layers[i + 1],
+                                data.layers[i],
+                                ...data.layers.slice(i + 2),
+                            ],
+                        })
+                    }
+                >
+                    <FontAwesomeIcon icon={faChevronDown} />
+                </button>
+                <div>{layer.type}</div>
+                <div className="flex-1" />
+                <button className="act small" onClick={(e) => setRaw(!raw)}>
+                    <FontAwesomeIcon icon={faEdit} />
+                </button>
+                <button
+                    className="delete small"
+                    onClick={(e) => deleteLayer(i)}
+                >
+                    <FontAwesomeIcon icon={faXmark} />
+                </button>
+            </div>
+            {raw ? (
+                <LayerEditorJSON
+                    layer={layer}
+                    updateLayer={(layer) => updateLayer(i, layer)}
+                />
+            ) : layer.type === "image" ? (
+                <LayerEditorImage
+                    badge={data}
+                    layer={layer}
+                    updateLayer={(layer) => updateLayer(i, layer)}
+                />
+            ) : layer.type == "edge-text" ? (
+                <LayerEditorEdgeText
+                    layer={layer}
+                    updateLayer={(layer) => updateLayer(i, layer)}
+                />
+            ) : layer.type == "hflag" ? (
+                <LayerEditorHFlag
+                    layer={layer}
+                    updateLayer={(layer) => updateLayer(i, layer)}
+                />
+            ) : (
+                <LayerEditorJSON
+                    layer={layer}
+                    updateLayer={(layer) => updateLayer(i, layer)}
+                />
+            )}
         </div>
-        {raw ? (
-            <LayerEditorJSON
-                layer={layer}
-                updateLayer={(layer) =>
-                    updateLayer(i, layer)
-                }
-            />
-        ) : layer.type === 'image' ? (
-            <LayerEditorImage
-                badge={data}
-                layer={layer}
-                updateLayer={(layer) =>
-                    updateLayer(i, layer)
-                }
-            />
-        ) : layer.type == 'edge-text' ? (
-            <LayerEditorEdgeText
-                layer={layer}
-                updateLayer={(layer) =>
-                    updateLayer(i, layer)
-                }
-            />
-        ) : layer.type == 'hflag' ? (
-            <LayerEditorHFlag
-                layer={layer}
-                updateLayer={(layer) =>
-                    updateLayer(i, layer)
-                }
-            />
-        ) : (
-            <LayerEditorJSON
-                layer={layer}
-                updateLayer={(layer) =>
-                    updateLayer(i, layer)
-                }
-            />
-        )}
-    </div>
-
+    );
 }
 
 function LayerEditorImage({
@@ -362,26 +370,32 @@ function LayerEditorImage({
     layer,
     updateLayer,
 }: {
-    badge: BadgeData
-    layer: LayerData & { type: 'image' }
-    updateLayer: (layer: LayerData) => void
+    badge: BadgeData;
+    layer: LayerData & { type: "image" };
+    updateLayer: (layer: LayerData) => void;
 }) {
     return (
         <EditorTable
             file={
                 <>
-                    {layer.image.length > 0 && <img className="max-w-20 max-h-20" src={getImageUrl(badge, layer.image)} alt="layer" />}
+                    {layer.image.length > 0 && (
+                        <img
+                            className="max-w-20 max-h-20"
+                            src={getImageUrl(badge, layer.image)}
+                            alt="layer"
+                        />
+                    )}
                     <input
                         type="file"
                         accept="image/*"
                         onChange={(e) => {
-                            const file = e.target.files?.[0]
+                            const file = e.target.files?.[0];
                             if (file) {
-                                badge.files.push(file)
+                                badge.files.push(file);
                                 updateLayer({
                                     ...layer,
                                     image: file.name,
-                                })
+                                });
                             }
                         }}
                     />
@@ -424,15 +438,15 @@ function LayerEditorImage({
                 />
             }
         />
-    )
+    );
 }
 
 function LayerEditorEdgeText({
     layer,
     updateLayer,
 }: {
-    layer: LayerData & { type: 'edge-text' }
-    updateLayer: (layer: LayerData) => void
+    layer: LayerData & { type: "edge-text" };
+    updateLayer: (layer: LayerData) => void;
 }) {
     return (
         <EditorTable
@@ -458,17 +472,17 @@ function LayerEditorEdgeText({
                 />
             }
         />
-    )
+    );
 }
 
 function LayerEditorHFlag({
     layer,
     updateLayer,
 }: {
-    layer: LayerData & { type: 'hflag' }
-    updateLayer: (layer: LayerData) => void
+    layer: LayerData & { type: "hflag" };
+    updateLayer: (layer: LayerData) => void;
 }) {
-    const [ stripes, setStripes ] = useState(layer.stripes.length)
+    const [stripes, setStripes] = useState(layer.stripes.length);
     return (
         <>
             <EditorTable
@@ -477,23 +491,25 @@ function LayerEditorHFlag({
                         type={"number"}
                         value={layer.stripes.length}
                         onChange={(e) => {
-                            const newStripes = parseInt(e.target.value)
-                            if (newStripes < 1) return
-                            const currentStripes = layer.stripes.length
+                            const newStripes = parseInt(e.target.value);
+                            if (newStripes < 1) return;
+                            const currentStripes = layer.stripes.length;
                             if (newStripes > currentStripes) {
-                                const newStripe = { color: 'black', size: 1 }
+                                const newStripe = { color: "black", size: 1 };
                                 updateLayer({
                                     ...layer,
                                     stripes: [
                                         ...layer.stripes,
-                                        ...Array(newStripes - currentStripes).fill(newStripe),
+                                        ...Array(
+                                            newStripes - currentStripes,
+                                        ).fill(newStripe),
                                     ],
-                                })
+                                });
                             } else if (newStripes < currentStripes) {
                                 updateLayer({
                                     ...layer,
                                     stripes: layer.stripes.slice(0, newStripes),
-                                })
+                                });
                             }
                         }}
                     />
@@ -505,23 +521,23 @@ function LayerEditorHFlag({
                         type="color"
                         value={stripe}
                         onChange={(e) => {
-                            const newStripes = [...layer.stripes]
-                            newStripes[i] = e.target.value
-                            updateLayer({ ...layer, stripes: newStripes })
+                            const newStripes = [...layer.stripes];
+                            newStripes[i] = e.target.value;
+                            updateLayer({ ...layer, stripes: newStripes });
                         }}
                     />
                 </div>
             ))}
         </>
-    )
+    );
 }
 
 function LayerEditorJSON({
     layer,
     updateLayer,
 }: {
-    layer: LayerData
-    updateLayer: (layer: LayerData) => void
+    layer: LayerData;
+    updateLayer: (layer: LayerData) => void;
 }) {
     return (
         <div>
@@ -530,25 +546,25 @@ function LayerEditorJSON({
                 rows={5}
                 onChange={(e) => {
                     try {
-                        const newLayer = JSON.parse(e.target.value)
-                        updateLayer(newLayer)
+                        const newLayer = JSON.parse(e.target.value);
+                        updateLayer(newLayer);
                     } catch (e) {
-                        console.error(e)
+                        console.error(e);
                     }
                 }}
             />
         </div>
-    )
+    );
 }
 
 function LayerAdder({
     badgeData,
     setBadgeData,
 }: {
-    badgeData: BadgeData
-    setBadgeData: (data: BadgeData) => void
+    badgeData: BadgeData;
+    setBadgeData: (data: BadgeData) => void;
 }) {
-    const [type, setType] = useState<LayerType>('image')
+    const [type, setType] = useState<LayerType>("image");
 
     return (
         <div className="flex flex-row items-center gap-2 p-2 border rounded-lg border-green-600 bg-green-950">
@@ -557,21 +573,22 @@ function LayerAdder({
                 onChange={(e) => {
                     let type = e.target.value as LayerType;
                     let defaults = LAYER_DEFAULTS[type];
-                    if(defaults.type == "edge-text") {
-                        defaults.text = badgeData.title
+                    if (defaults.type == "edge-text") {
+                        defaults.text = badgeData.title;
                     }
                     setBadgeData({
                         ...badgeData,
                         layers: [...badgeData.layers, defaults],
-                    })
-
+                    });
                 }}
             >
-                <option disabled={true} value="">Add Layer</option>
+                <option disabled={true} value="">
+                    Add Layer
+                </option>
                 <option value="image">Image</option>
                 <option value="hflag">Horizontal Flag</option>
                 <option value="edge-text">Edge Text</option>
             </select>
         </div>
-    )
+    );
 }

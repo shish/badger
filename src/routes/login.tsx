@@ -1,34 +1,38 @@
-import { createFileRoute } from '@tanstack/react-router'
-import { useContext, useState } from 'react'
-import { PocketBaseContext } from '../providers/pocketbase'
+import { createFileRoute } from "@tanstack/react-router";
+import { useContext, useState } from "react";
+import { PocketBaseContext } from "../providers/pocketbase";
 
-export const Route = createFileRoute('/login')({
+export const Route = createFileRoute("/login")({
     component: LoginComponent,
-})
+});
 
 function LoginComponent() {
-    return <>
-        <LoginBox />
-        <RegisterBox />
-    </>
+    return (
+        <>
+            <LoginBox />
+            <RegisterBox />
+        </>
+    );
 }
 
 function LoginBox() {
-    const navigate = Route.useNavigate()
+    const navigate = Route.useNavigate();
 
-    const { pb, user, login } = useContext(PocketBaseContext)
-    const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
+    const { pb, user, login } = useContext(PocketBaseContext);
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
 
     function loginAndRedirect() {
         login(email, password);
-        navigate({ to: '/profile' })
+        navigate({ to: "/profile" });
     }
     return (
-        <form onSubmit={(e) => {
-            e.preventDefault()
-            loginAndRedirect()
-        }}>
+        <form
+            onSubmit={(e) => {
+                e.preventDefault();
+                loginAndRedirect();
+            }}
+        >
             <table>
                 <tbody>
                     <tr>
@@ -53,7 +57,10 @@ function LoginBox() {
                     </tr>
                     <tr>
                         <td colSpan={2}>
-                            <button className="act" onClick={() => loginAndRedirect()}>
+                            <button
+                                className="act"
+                                onClick={() => loginAndRedirect()}
+                            >
                                 Login
                             </button>
                         </td>
@@ -61,27 +68,29 @@ function LoginBox() {
                 </tbody>
             </table>
         </form>
-    )
+    );
 }
 
 function RegisterBox() {
-    const navigate = Route.useNavigate()
+    const navigate = Route.useNavigate();
 
-    const { pb, user, register } = useContext(PocketBaseContext)
-    const [email, setEmail] = useState('')
-    const [name, setName] = useState('')
-    const [password, setPassword] = useState('')
-    const [passwordConfirm, setPasswordConfirm] = useState('')
+    const { pb, user, register } = useContext(PocketBaseContext);
+    const [email, setEmail] = useState("");
+    const [name, setName] = useState("");
+    const [password, setPassword] = useState("");
+    const [passwordConfirm, setPasswordConfirm] = useState("");
 
     function registerAndRedirect() {
         register(name, email, password, passwordConfirm);
-        navigate({ to: '/profile' })
+        navigate({ to: "/profile" });
     }
     return (
-        <form onSubmit={(e) => {
-            e.preventDefault()
-            registerAndRedirect()
-        }}>
+        <form
+            onSubmit={(e) => {
+                e.preventDefault();
+                registerAndRedirect();
+            }}
+        >
             <table>
                 <tbody>
                     <tr>
@@ -120,13 +129,18 @@ function RegisterBox() {
                             <input
                                 type="password"
                                 defaultValue={passwordConfirm}
-                                onChange={(e) => setPasswordConfirm(e.target.value)}
+                                onChange={(e) =>
+                                    setPasswordConfirm(e.target.value)
+                                }
                             />
                         </td>
                     </tr>
                     <tr>
                         <td colSpan={2}>
-                            <button className="act" onClick={() => registerAndRedirect()}>
+                            <button
+                                className="act"
+                                onClick={() => registerAndRedirect()}
+                            >
                                 Register
                             </button>
                         </td>
@@ -134,5 +148,5 @@ function RegisterBox() {
                 </tbody>
             </table>
         </form>
-    )
+    );
 }

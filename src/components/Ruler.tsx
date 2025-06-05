@@ -17,8 +17,8 @@ export function Ruler({ scale }: { scale: number }) {
                     height="3"
                     fill="black"
                 />
-            </svg>{' '}
+            </svg>{" "}
             100mm ({100 * scale}%)
         </div>
-    )
+    );
 }

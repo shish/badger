@@ -1,34 +1,38 @@
-import * as React from 'react'
-import { createFileRoute } from '@tanstack/react-router'
-import { useReactToPrint } from 'react-to-print'
-import { useContext, useEffect, useRef, useState } from 'react'
+import * as React from "react";
+import { createFileRoute } from "@tanstack/react-router";
+import { useReactToPrint } from "react-to-print";
+import { useContext, useEffect, useRef, useState } from "react";
 
-import { Grid } from '../components/Grid'
-import { Ruler } from '../components/Ruler'
-import { Badge } from '../components/Badge'
-import { BadgeGridItem } from '../components/BadgeGridItem'
-import { BasketContext } from '../providers/basket'
-import { PocketBaseContext } from '../providers/pocketbase'
+import { Grid } from "../components/Grid";
+import { Ruler } from "../components/Ruler";
+import { Badge } from "../components/Badge";
+import { BadgeGridItem } from "../components/BadgeGridItem";
+import { BasketContext } from "../providers/basket";
+import { PocketBaseContext } from "../providers/pocketbase";
 
-export const Route = createFileRoute('/basket')({
+export const Route = createFileRoute("/basket")({
     component: BasketComponent,
     loader: async ({ context }) => {
         const badgeList = await context.pb
-            .collection('badges')
+            .collection("badges")
             .getFullList<BadgeData>(500, {
-                filter: Object.keys(context.basket.badges).map((id) => `id="${id}"`).join(' || '),
+                filter: Object.keys(context.basket.badges)
+                    .map((id) => `id="${id}"`)
+                    .join(" || "),
             });
 
         return {
-            badgeDB: Object.fromEntries(badgeList.map((item) => [item.id, item])),
-        }
-    }
-})
+            badgeDB: Object.fromEntries(
+                badgeList.map((item) => [item.id, item]),
+            ),
+        };
+    },
+});
 
 function BasketComponent() {
-    const { badgeDB } = Route.useLoaderData()
-    const { badges } = useContext(BasketContext)
-    const contentRef = useRef<HTMLDivElement>(null)
+    const { badgeDB } = Route.useLoaderData();
+    const { badges } = useContext(BasketContext);
+    const contentRef = useRef<HTMLDivElement>(null);
     const { user } = useContext(PocketBaseContext);
     const printScale = user?.settings?.printScale || 1.0;
 
@@ -38,47 +42,46 @@ function BasketComponent() {
             <br />
             {/* for editing */}
             <Grid>
-                {Object
-                    .entries(badges)
+                {Object.entries(badges)
                     .filter(([id, count]) => badgeDB.hasOwnProperty(id))
                     .map(([id, count]) => (
                         <BadgeGridItem key={id} data={badgeDB[id]} />
-                    )
-                )}
+                    ))}
             </Grid>
             {/* for printing */}
-            <div style={{ display: 'none' }}>
+            <div style={{ display: "none" }}>
                 <div ref={contentRef}>
                     <Ruler scale={printScale} />
-                    <Grid gap={'5mm'} scale={printScale}>
-                        {Object
-                            .entries(badges)
+                    <Grid gap={"5mm"} scale={printScale}>
+                        {Object.entries(badges)
                             .filter(([id, count]) => badgeDB.hasOwnProperty(id))
                             .map(([id, count]) =>
-                            Array.from({ length: count }).map((_, index) => (
-                                <Badge
-                                    key={`${id}-${index}`}
-                                    data={badgeDB[id]}
-                                    scale={printScale}
-                                />
-                            ))
-                        )}
+                                Array.from({ length: count }).map(
+                                    (_, index) => (
+                                        <Badge
+                                            key={`${id}-${index}`}
+                                            data={badgeDB[id]}
+                                            scale={printScale}
+                                        />
+                                    ),
+                                ),
+                            )}
                     </Grid>
                 </div>
             </div>
         </div>
-    )
+    );
 }
 
 function Controls({
     pageRef,
 }: {
-    pageRef: React.RefObject<HTMLDivElement | null>
+    pageRef: React.RefObject<HTMLDivElement | null>;
 }) {
     const reactToPrintFn = useReactToPrint({
-        documentTitle: 'Badges',
+        documentTitle: "Badges",
         contentRef: pageRef,
-    })
+    });
 
     return (
         <div className="flex flex-row gap-2">
@@ -87,5 +90,5 @@ function Controls({
             </button>
             <div className="flex-1" />
         </div>
-    )
+    );
 }
