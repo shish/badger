@@ -10,7 +10,7 @@ export function Header() {
 
     const aps = { className: "font-bold" };
     return (
-        <div className="p-2 flex gap-2 text-lg flex-col sm:flex-row">
+        <header className="p-2 flex gap-2 text-lg flex-col sm:flex-row">
             <div className="flex-row">
                 <Separated separator=" | ">
                     <Link
@@ -49,7 +49,7 @@ export function Header() {
                     </Link>
                 </Separated>
             </div>
-        </div>
+        </header>
     );
 }
 

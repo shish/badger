@@ -19,11 +19,9 @@ function RootComponent() {
     return (
         <>
             <Header />
-            <hr />
             <Catcher>
                 <Outlet />
             </Catcher>
-            <hr />
             <Footer />
             <TanStackRouterDevtools position="bottom-right" />
         </>
