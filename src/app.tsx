@@ -29,7 +29,7 @@ declare module "@tanstack/react-router" {
 const App = () => {
     return (
         <React.StrictMode>
-            <PocketBaseProvider url={"http://localhost:3000/"}>
+            <PocketBaseProvider url={`${window.location.protocol}//${window.location.host}/`}>
                 <BasketProvider>
                     <InnerApp />
                 </BasketProvider>
