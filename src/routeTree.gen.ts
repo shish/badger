@@ -8,90 +8,38 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-// Import Routes
+import { Route as rootRouteImport } from './routes/__root'
+import { Route as ProfileRouteImport } from './routes/profile'
+import { Route as BasketRouteImport } from './routes/basket'
+import { Route as IndexRouteImport } from './routes/index'
+import { Route as BadgesIndexRouteImport } from './routes/badges.index'
+import { Route as BadgesIdRouteImport } from './routes/badges.$id'
 
-import { Route as rootRoute } from './routes/__root'
-import { Route as ProfileImport } from './routes/profile'
-import { Route as BasketImport } from './routes/basket'
-import { Route as IndexImport } from './routes/index'
-import { Route as BadgesIndexImport } from './routes/badges.index'
-import { Route as BadgesIdImport } from './routes/badges.$id'
-
-// Create/Update Routes
-
-const ProfileRoute = ProfileImport.update({
+const ProfileRoute = ProfileRouteImport.update({
   id: '/profile',
   path: '/profile',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const BasketRoute = BasketImport.update({
+const BasketRoute = BasketRouteImport.update({
   id: '/basket',
   path: '/basket',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const IndexRoute = IndexImport.update({
+const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const BadgesIndexRoute = BadgesIndexImport.update({
+const BadgesIndexRoute = BadgesIndexRouteImport.update({
   id: '/badges/',
   path: '/badges/',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const BadgesIdRoute = BadgesIdImport.update({
+const BadgesIdRoute = BadgesIdRouteImport.update({
   id: '/badges/$id',
   path: '/badges/$id',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-// Populate the FileRoutesByPath interface
-
-declare module '@tanstack/react-router' {
-  interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexImport
-      parentRoute: typeof rootRoute
-    }
-    '/basket': {
-      id: '/basket'
-      path: '/basket'
-      fullPath: '/basket'
-      preLoaderRoute: typeof BasketImport
-      parentRoute: typeof rootRoute
-    }
-    '/profile': {
-      id: '/profile'
-      path: '/profile'
-      fullPath: '/profile'
-      preLoaderRoute: typeof ProfileImport
-      parentRoute: typeof rootRoute
-    }
-    '/badges/$id': {
-      id: '/badges/$id'
-      path: '/badges/$id'
-      fullPath: '/badges/$id'
-      preLoaderRoute: typeof BadgesIdImport
-      parentRoute: typeof rootRoute
-    }
-    '/badges/': {
-      id: '/badges/'
-      path: '/badges'
-      fullPath: '/badges'
-      preLoaderRoute: typeof BadgesIndexImport
-      parentRoute: typeof rootRoute
-    }
-  }
-}
-
-// Create and export the route tree
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -100,7 +48,6 @@ export interface FileRoutesByFullPath {
   '/badges/$id': typeof BadgesIdRoute
   '/badges': typeof BadgesIndexRoute
 }
-
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/basket': typeof BasketRoute
@@ -108,16 +55,14 @@ export interface FileRoutesByTo {
   '/badges/$id': typeof BadgesIdRoute
   '/badges': typeof BadgesIndexRoute
 }
-
 export interface FileRoutesById {
-  __root__: typeof rootRoute
+  __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/basket': typeof BasketRoute
   '/profile': typeof ProfileRoute
   '/badges/$id': typeof BadgesIdRoute
   '/badges/': typeof BadgesIndexRoute
 }
-
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths: '/' | '/basket' | '/profile' | '/badges/$id' | '/badges'
@@ -126,13 +71,52 @@ export interface FileRouteTypes {
   id: '__root__' | '/' | '/basket' | '/profile' | '/badges/$id' | '/badges/'
   fileRoutesById: FileRoutesById
 }
-
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   BasketRoute: typeof BasketRoute
   ProfileRoute: typeof ProfileRoute
   BadgesIdRoute: typeof BadgesIdRoute
   BadgesIndexRoute: typeof BadgesIndexRoute
+}
+
+declare module '@tanstack/react-router' {
+  interface FileRoutesByPath {
+    '/profile': {
+      id: '/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof ProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/basket': {
+      id: '/basket'
+      path: '/basket'
+      fullPath: '/basket'
+      preLoaderRoute: typeof BasketRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/badges/': {
+      id: '/badges/'
+      path: '/badges'
+      fullPath: '/badges'
+      preLoaderRoute: typeof BadgesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/badges/$id': {
+      id: '/badges/$id'
+      path: '/badges/$id'
+      fullPath: '/badges/$id'
+      preLoaderRoute: typeof BadgesIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+  }
 }
 
 const rootRouteChildren: RootRouteChildren = {
@@ -142,39 +126,6 @@ const rootRouteChildren: RootRouteChildren = {
   BadgesIdRoute: BadgesIdRoute,
   BadgesIndexRoute: BadgesIndexRoute,
 }
-
-export const routeTree = rootRoute
+export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-/* ROUTE_MANIFEST_START
-{
-  "routes": {
-    "__root__": {
-      "filePath": "__root.tsx",
-      "children": [
-        "/",
-        "/basket",
-        "/profile",
-        "/badges/$id",
-        "/badges/"
-      ]
-    },
-    "/": {
-      "filePath": "index.tsx"
-    },
-    "/basket": {
-      "filePath": "basket.tsx"
-    },
-    "/profile": {
-      "filePath": "profile.tsx"
-    },
-    "/badges/$id": {
-      "filePath": "badges.$id.tsx"
-    },
-    "/badges/": {
-      "filePath": "badges.index.tsx"
-    }
-  }
-}
-ROUTE_MANIFEST_END */
