@@ -1,7 +1,7 @@
-import { useContext } from "react";
 import { Link } from "@tanstack/react-router";
-import { Badge } from "./Badge";
+import { useContext } from "react";
 import { BasketContext } from "../providers/basket";
+import { Badge } from "./Badge";
 
 export function BadgeGridItem({ data }: { data: BadgeData }) {
     const { badges, addBadge, setBadge, removeBadge } =

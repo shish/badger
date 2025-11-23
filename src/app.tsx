@@ -1,11 +1,11 @@
-import * as React from "react";
 import { RouterProvider, createRouter } from "@tanstack/react-router";
+import * as React from "react";
 
-import { routeTree } from "./routeTree.gen";
-import "./styles.css";
+import { useContext } from "react";
 import { BasketContext, BasketProvider } from "./providers/basket";
 import { PocketBaseContext, PocketBaseProvider } from "./providers/pocketbase";
-import { useContext } from "react";
+import { routeTree } from "./routeTree.gen";
+import "./styles.css";
 
 // Set up a Router instance
 const router = createRouter({
@@ -29,7 +29,9 @@ declare module "@tanstack/react-router" {
 const App = () => {
     return (
         <React.StrictMode>
-            <PocketBaseProvider url={`${window.location.protocol}//${window.location.host}/`}>
+            <PocketBaseProvider
+                url={`${window.location.protocol}//${window.location.host}/`}
+            >
                 <BasketProvider>
                     <InnerApp />
                 </BasketProvider>

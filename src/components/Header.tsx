@@ -1,8 +1,8 @@
-import { useContext } from "react";
-import { PocketBaseContext } from "../providers/pocketbase";
 import { Link, useNavigate } from "@tanstack/react-router";
-import { Separated } from "./Separated";
+import { useContext } from "react";
 import { LAYER_DEFAULTS } from "../data";
+import { PocketBaseContext } from "../providers/pocketbase";
+import { Separated } from "./Separated";
 
 export function Header() {
     const { user, logout } = useContext(PocketBaseContext);

@@ -1,8 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { PocketBaseContext } from "../providers/pocketbase";
+import { AuthProviderInfo } from "pocketbase";
 import { useContext, useEffect, useState } from "react";
 import { EditorTable } from "../components/EditorTable";
-import { AuthProviderInfo } from "pocketbase";
+import { PocketBaseContext } from "../providers/pocketbase";
 
 export const Route = createFileRoute("/profile")({
     component: ProfileOrLoginComponent,

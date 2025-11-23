@@ -1,10 +1,10 @@
 import { Decal, OrbitControls, PerspectiveCamera } from "@react-three/drei";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { useEffect, useRef, useState } from "react";
-import * as THREE from "three";
-import { Badge, CANVAS_SIZE } from "./Badge";
 import { renderToStaticMarkup } from "react-dom/server";
+import * as THREE from "three";
 import { OBJLoader } from "three/addons/loaders/OBJLoader.js";
+import { Badge, CANVAS_SIZE } from "./Badge";
 
 export default function Badge3D({ data }: { data: BadgeData }) {
     const [autoRotate, setAutoRotate] = useState(true);

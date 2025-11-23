@@ -1,20 +1,20 @@
-import { createFileRoute, Link, CatchBoundary } from "@tanstack/react-router";
-import { useContext, useEffect, useRef, useState, lazy } from "react";
-import { Badge } from "../components/Badge";
-import { BasketContext } from "../providers/basket";
-import { EditorTable } from "../components/EditorTable";
-import { LAYER_DEFAULTS, getImageUrl } from "../data";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-    faXmark,
-    faEdit,
-    faChevronUp,
     faChevronDown,
+    faChevronUp,
+    faEdit,
+    faXmark,
 } from "@fortawesome/free-solid-svg-icons";
-import { PocketBaseContext } from "../providers/pocketbase";
-import { TagList } from "../components/TagList";
-import { Separated } from "../components/Separated";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { createFileRoute } from "@tanstack/react-router";
+import { lazy, useContext, useEffect, useState } from "react";
+import { Badge } from "../components/Badge";
 import { Catcher } from "../components/Catcher";
+import { EditorTable } from "../components/EditorTable";
+import { Separated } from "../components/Separated";
+import { TagList } from "../components/TagList";
+import { getImageUrl, LAYER_DEFAULTS } from "../data";
+import { BasketContext } from "../providers/basket";
+import { PocketBaseContext } from "../providers/pocketbase";
 
 const Badge3D = lazy(() => import("../components/Badge3D"));
 

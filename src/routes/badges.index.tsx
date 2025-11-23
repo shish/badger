@@ -1,8 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 
-import { Grid } from "../components/Grid";
 import { BadgeGridItem } from "../components/BadgeGridItem";
+import { Grid } from "../components/Grid";
 
 type BadgeSearchSortOptions = "title" | "-created" | "-updated";
 

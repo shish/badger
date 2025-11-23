@@ -1,12 +1,12 @@
-import * as React from "react";
 import { createFileRoute } from "@tanstack/react-router";
+import * as React from "react";
+import { useContext, useRef } from "react";
 import { useReactToPrint } from "react-to-print";
-import { useContext, useEffect, useRef, useState } from "react";
 
-import { Grid } from "../components/Grid";
-import { Ruler } from "../components/Ruler";
 import { Badge } from "../components/Badge";
 import { BadgeGridItem } from "../components/BadgeGridItem";
+import { Grid } from "../components/Grid";
+import { Ruler } from "../components/Ruler";
 import { BasketContext } from "../providers/basket";
 import { PocketBaseContext } from "../providers/pocketbase";
 

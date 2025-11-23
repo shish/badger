@@ -1,5 +1,5 @@
-import { createContext, useCallback, useMemo, useState } from "react";
 import PocketBase, { RecordModel } from "pocketbase";
+import { createContext, useMemo, useState } from "react";
 
 type PocketBaseContextType = {
     pb: PocketBase;
@@ -15,11 +15,13 @@ type PocketBaseContextType = {
     logout: () => void;
 };
 
-export const PocketBaseContext = createContext<PocketBaseContextType>({} as PocketBaseContextType);
+export const PocketBaseContext = createContext<PocketBaseContextType>(
+    {} as PocketBaseContextType,
+);
 
 export function PocketBaseProvider(props: any) {
     const pb = useMemo(() => new PocketBase(props.url), []);
-    const [ user, setUser ] = useState<RecordModel | null>(pb.authStore.record);
+    const [user, setUser] = useState<RecordModel | null>(pb.authStore.record);
 
     function register(
         name: string,

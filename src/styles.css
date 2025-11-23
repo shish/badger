@@ -36,7 +36,7 @@ TABLE.form {
     @apply w-full;
     TH {
         text-align: right;
-        padding-right: .5em;
+        padding-right: 0.5em;
         width: 1em;
         white-space: nowrap;
     }
