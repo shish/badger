@@ -29,7 +29,7 @@
         "@rsbuild/plugin-react": "^1.4.4",
         "@tailwindcss/postcss": "^4.1.18",
         "@tanstack/router-plugin": "^1.157.18",
-        "@types/node": "^24.10.1",
+        "@types/node": "^25.1.0",
         "@types/react": "^19.2.10",
         "@types/react-dom": "^19.2.3",
         "pocketbase": "^0.26.8",
