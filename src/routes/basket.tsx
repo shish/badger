@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import * as React from "react";
+import type * as React from "react";
 import { useContext, useRef } from "react";
 import { useReactToPrint } from "react-to-print";
 
@@ -43,8 +43,8 @@ function BasketComponent() {
             {/* for editing */}
             <Grid>
                 {Object.entries(badges)
-                    .filter(([id, count]) => badgeDB.hasOwnProperty(id))
-                    .map(([id, count]) => (
+                    .filter(([id, _count]) => Object.hasOwn(badgeDB, id))
+                    .map(([id, _count]) => (
                         <BadgeGridItem key={id} data={badgeDB[id]} />
                     ))}
             </Grid>
@@ -54,7 +54,9 @@ function BasketComponent() {
                     <Ruler scale={printScale} />
                     <Grid gap={"5mm"} scale={printScale}>
                         {Object.entries(badges)
-                            .filter(([id, count]) => badgeDB.hasOwnProperty(id))
+                            .filter(([id, _count]) =>
+                                Object.hasOwn(badgeDB, id),
+                            )
                             .map(([id, count]) =>
                                 Array.from({ length: count }).map(
                                     (_, index) => (
@@ -85,7 +87,11 @@ function Controls({
 
     return (
         <div className="flex flex-row gap-2">
-            <button className="act small" onClick={reactToPrintFn}>
+            <button
+                type="button"
+                className="act small"
+                onClick={reactToPrintFn}
+            >
                 Print
             </button>
             <div className="flex-1" />

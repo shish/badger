@@ -21,7 +21,7 @@ export default function Badge3D({ data }: { data: BadgeData }) {
             <BadgeObj data={data} autoRotate={autoRotate} />
             <OrbitControls
                 enableZoom={true}
-                onStart={(e) => setAutoRotate(false)}
+                onStart={() => setAutoRotate(false)}
             />
         </Canvas>
     );

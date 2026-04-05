@@ -122,7 +122,7 @@ export function Badge({
 }
 
 function Layer({ badge, data }: { badge: BadgeData; data: LayerData }) {
-    if (data.type == "image") {
+    if (data.type === "image") {
         const centre = CANVAS_SIZE / 2;
         const size = CANVAS_SIZE * (data.scale ?? 1.0);
         const xoff = centre - size / 2 + (data.offset?.[0] ?? 0);
@@ -139,7 +139,7 @@ function Layer({ badge, data }: { badge: BadgeData; data: LayerData }) {
                 />
             </g>
         );
-    } else if (data.type == "hflag") {
+    } else if (data.type === "hflag") {
         const centre = CANVAS_SIZE / 2;
         const xsize = CANVAS_SIZE;
         const ysize = FRONT_VISIBLE_SIZE;
@@ -148,8 +148,9 @@ function Layer({ badge, data }: { badge: BadgeData; data: LayerData }) {
 
         const total = data.stripes.length;
         const stripeSize = ysize / total;
-        let stripes: React.ReactNode[] = [
+        const stripes: React.ReactNode[] = [
             <rect
+                key={"top"}
                 x={xoff}
                 y={0}
                 width={xsize}
@@ -157,6 +158,7 @@ function Layer({ badge, data }: { badge: BadgeData; data: LayerData }) {
                 fill={data.stripes[0]}
             />,
             <rect
+                key={"bottom"}
                 x={xoff}
                 y={CANVAS_SIZE - (CANVAS_SIZE - FRONT_VISIBLE_SIZE) / 2}
                 width={xsize}
@@ -177,7 +179,7 @@ function Layer({ badge, data }: { badge: BadgeData; data: LayerData }) {
             );
         });
         return <g className="hflag">{stripes}</g>;
-    } else if (data.type == "edge-text") {
+    } else if (data.type === "edge-text") {
         let text = data.text;
         text = text.replace("$TITLE$", badge.title);
         text = text.replace("$ID$", badge.id);
@@ -215,7 +217,7 @@ function Layer({ badge, data }: { badge: BadgeData; data: LayerData }) {
             </text>
         );
     }
-    return <></>;
+    return null;
 }
 
 function GuideDash({ cx, cy, r }: { cx: number; cy: number; r: number }) {

@@ -8,12 +8,9 @@ export interface BasketContextType {
     removeBadge: (id: string) => void;
 }
 
-export const BasketContext = React.createContext<BasketContextType>({
-    badges: {},
-    addBadge: (id: string) => {},
-    setBadge: (id: string, number: number) => {},
-    removeBadge: (id: string) => {},
-});
+export const BasketContext = React.createContext<BasketContextType>(
+    {} as BasketContextType,
+);
 
 export function BasketProvider(props: { children: React.ReactNode }) {
     const [badges, setBadges] = useLocalStorage<Record<string, number>>(

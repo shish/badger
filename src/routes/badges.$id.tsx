@@ -66,8 +66,9 @@ function BadgeViewComponent() {
             <Separated>
                 {edit && (
                     <button
+                        type="button"
                         className="act"
-                        onClick={(e) => {
+                        onClick={() => {
                             saveBadge();
                             setEdit(false);
                         }}
@@ -77,8 +78,9 @@ function BadgeViewComponent() {
                 )}
                 {edit && (
                     <button
+                        type="button"
                         className="act"
-                        onClick={(e) => {
+                        onClick={() => {
                             resetBadge();
                             setEdit(false);
                         }}
@@ -88,8 +90,9 @@ function BadgeViewComponent() {
                 )}
                 {!edit && (
                     <button
+                        type="button"
                         className="act"
-                        onClick={(e) => {
+                        onClick={() => {
                             addBadge(badgeData.id);
                             navigate({ to: "/basket" });
                         }}
@@ -97,15 +100,20 @@ function BadgeViewComponent() {
                         Add to Basket
                     </button>
                 )}
-                {!edit && badgeData.owner == user?.id && (
-                    <button className="act" onClick={(e) => setEdit(true)}>
+                {!edit && badgeData.owner === user?.id && (
+                    <button
+                        type="button"
+                        className="act"
+                        onClick={() => setEdit(true)}
+                    >
                         Edit
                     </button>
                 )}
-                {!edit && badgeData.owner == user?.id && (
+                {!edit && badgeData.owner === user?.id && (
                     <button
+                        type="button"
                         className="act"
-                        onClick={(e) => {
+                        onClick={() => {
                             deleteBadge();
                         }}
                     >
@@ -138,8 +146,9 @@ function BadgeViewComponent() {
 
                     {process.env.NODE_ENV === "development" && (
                         <button
+                            type="button"
                             className="small act"
-                            onClick={(e) => set3D(!is3D)}
+                            onClick={() => set3D(!is3D)}
                             style={{
                                 position: "absolute",
                                 top: "0.5rem",
@@ -289,9 +298,10 @@ function LayerEditor({
         <div className="flex-0 border rounded-lg border-green-600 bg-green-950">
             <div className="flex flex-row border-b-2 rounded-t-lg border-green-600 p-2 gap-2 bg-green-900">
                 <button
+                    type="button"
                     className="act small"
                     disabled={i <= 0}
-                    onClick={(e) =>
+                    onClick={() =>
                         setData({
                             ...data,
                             layers: [
@@ -306,9 +316,10 @@ function LayerEditor({
                     <FontAwesomeIcon icon={faChevronUp} />
                 </button>
                 <button
+                    type="button"
                     className="act small"
                     disabled={i >= data.layers.length - 1}
-                    onClick={(e) =>
+                    onClick={() =>
                         setData({
                             ...data,
                             layers: [
@@ -324,12 +335,17 @@ function LayerEditor({
                 </button>
                 <div>{layer.type}</div>
                 <div className="flex-1" />
-                <button className="act small" onClick={(e) => setRaw(!raw)}>
+                <button
+                    type="button"
+                    className="act small"
+                    onClick={() => setRaw(!raw)}
+                >
                     <FontAwesomeIcon icon={faEdit} />
                 </button>
                 <button
+                    type="button"
                     className="delete small"
-                    onClick={(e) => deleteLayer(i)}
+                    onClick={() => deleteLayer(i)}
                 >
                     <FontAwesomeIcon icon={faXmark} />
                 </button>
@@ -345,12 +361,12 @@ function LayerEditor({
                     layer={layer}
                     updateLayer={(layer) => updateLayer(i, layer)}
                 />
-            ) : layer.type == "edge-text" ? (
+            ) : layer.type === "edge-text" ? (
                 <LayerEditorEdgeText
                     layer={layer}
                     updateLayer={(layer) => updateLayer(i, layer)}
                 />
-            ) : layer.type == "hflag" ? (
+            ) : layer.type === "hflag" ? (
                 <LayerEditorHFlag
                     layer={layer}
                     updateLayer={(layer) => updateLayer(i, layer)}
@@ -482,7 +498,6 @@ function LayerEditorHFlag({
     layer: LayerData & { type: "hflag" };
     updateLayer: (layer: LayerData) => void;
 }) {
-    const [stripes, setStripes] = useState(layer.stripes.length);
     return (
         <>
             <EditorTable
@@ -491,7 +506,7 @@ function LayerEditorHFlag({
                         type={"number"}
                         value={layer.stripes.length}
                         onChange={(e) => {
-                            const newStripes = parseInt(e.target.value);
+                            const newStripes = parseInt(e.target.value, 10);
                             if (newStripes < 1) return;
                             const currentStripes = layer.stripes.length;
                             if (newStripes > currentStripes) {
@@ -565,17 +580,15 @@ function LayerAdder({
     badgeData: BadgeData;
     setBadgeData: (data: BadgeData) => void;
 }) {
-    const [type, setType] = useState<LayerType>("image");
-
     return (
         <div className="flex flex-row items-center gap-2 p-2 border rounded-lg border-green-600 bg-green-950">
             <select
                 value={""}
                 className="w-full"
                 onChange={(e) => {
-                    let type = e.target.value as LayerType;
-                    let defaults = LAYER_DEFAULTS[type];
-                    if (defaults.type == "edge-text") {
+                    const type = e.target.value as LayerType;
+                    const defaults = LAYER_DEFAULTS[type];
+                    if (defaults.type === "edge-text") {
                         defaults.text = badgeData.title;
                     }
                     setBadgeData({

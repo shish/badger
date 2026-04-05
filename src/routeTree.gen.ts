@@ -46,7 +46,7 @@ export interface FileRoutesByFullPath {
   '/basket': typeof BasketRoute
   '/profile': typeof ProfileRoute
   '/badges/$id': typeof BadgesIdRoute
-  '/badges': typeof BadgesIndexRoute
+  '/badges/': typeof BadgesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -65,7 +65,7 @@ export interface FileRoutesById {
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/basket' | '/profile' | '/badges/$id' | '/badges'
+  fullPaths: '/' | '/basket' | '/profile' | '/badges/$id' | '/badges/'
   fileRoutesByTo: FileRoutesByTo
   to: '/' | '/basket' | '/profile' | '/badges/$id' | '/badges'
   id: '__root__' | '/' | '/basket' | '/profile' | '/badges/$id' | '/badges/'
@@ -105,7 +105,7 @@ declare module '@tanstack/react-router' {
     '/badges/': {
       id: '/badges/'
       path: '/badges'
-      fullPath: '/badges'
+      fullPath: '/badges/'
       preLoaderRoute: typeof BadgesIndexRouteImport
       parentRoute: typeof rootRouteImport
     }

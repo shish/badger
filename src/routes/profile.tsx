@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { AuthProviderInfo } from "pocketbase";
+import type { AuthProviderInfo } from "pocketbase";
 import { useContext, useEffect, useState } from "react";
 import { EditorTable } from "../components/EditorTable";
 import { PocketBaseContext } from "../providers/pocketbase";
@@ -9,7 +9,7 @@ export const Route = createFileRoute("/profile")({
 });
 
 function ProfileOrLoginComponent() {
-    const { pb, user } = useContext(PocketBaseContext);
+    const { user } = useContext(PocketBaseContext);
 
     if (user) {
         return (
@@ -55,9 +55,10 @@ function OAuthBox() {
                 <legend className="text-sm">Login with ...</legend>
                 {providers.map((provider) => (
                     <button
+                        type="button"
                         key={provider.name}
                         className="act small"
-                        onClick={(e) => loginAndRedirect(provider.name)}
+                        onClick={() => loginAndRedirect(provider.name)}
                     >
                         {provider.displayName}
                     </button>
@@ -115,6 +116,7 @@ function LoginBox() {
                         <tr>
                             <td colSpan={2}>
                                 <button
+                                    type="button"
                                     className="act small"
                                     onClick={() => loginAndRedirect()}
                                 >
@@ -188,6 +190,7 @@ function RegisterBox() {
                         <tr>
                             <td colSpan={2}>
                                 <button
+                                    type="button"
                                     className="act small"
                                     onClick={() => registerAndRedirect()}
                                 >

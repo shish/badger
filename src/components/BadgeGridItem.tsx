@@ -4,8 +4,7 @@ import { BasketContext } from "../providers/basket";
 import { Badge } from "./Badge";
 
 export function BadgeGridItem({ data }: { data: BadgeData }) {
-    const { badges, addBadge, setBadge, removeBadge } =
-        useContext(BasketContext);
+    const { badges, addBadge, removeBadge } = useContext(BasketContext);
 
     return (
         <div className="text-black text-center bg-white rounded-lg">
@@ -27,7 +26,7 @@ export function BadgeGridItem({ data }: { data: BadgeData }) {
                         textAlign: "center",
                         lineHeight: "1.5em",
                     }}
-                    onClick={(e) => addBadge(data.id)}
+                    onClick={() => addBadge(data.id)}
                 >
                     +
                 </div>{" "}
@@ -43,7 +42,7 @@ export function BadgeGridItem({ data }: { data: BadgeData }) {
                         textAlign: "center",
                         lineHeight: "1.5em",
                     }}
-                    onClick={(e) => removeBadge(data.id)}
+                    onClick={() => removeBadge(data.id)}
                 >
                     -
                 </div>

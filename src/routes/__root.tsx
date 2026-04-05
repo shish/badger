@@ -1,10 +1,10 @@
-import { Outlet, createRootRouteWithContext } from "@tanstack/react-router";
+import { createRootRouteWithContext, Outlet } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
-import PocketBase from "pocketbase";
+import type PocketBase from "pocketbase";
 import { Catcher } from "../components/Catcher";
 import { Footer } from "../components/Footer";
 import { Header } from "../components/Header";
-import { BasketContextType } from "../providers/basket";
+import type { BasketContextType } from "../providers/basket";
 
 interface MyRouterContext {
     pb: PocketBase;

@@ -1,4 +1,4 @@
-import PocketBase, { RecordModel } from "pocketbase";
+import PocketBase, { type RecordModel } from "pocketbase";
 import { createContext, useMemo, useState } from "react";
 
 type PocketBaseContextType = {

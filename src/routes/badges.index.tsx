@@ -31,7 +31,7 @@ export const Route = createFileRoute("/badges/")({
     }),
     // Load the data
     loader: async ({ context, deps: { page, search, sort } }) => {
-        let filters = [];
+        const filters = [];
         if (search) {
             filters.push(`(title~"${search}" || tags~"${search}")`);
         }
@@ -101,6 +101,7 @@ function BadgeIndexComponent() {
             </form>
             <div className="flex flex-row gap-2 justify-center items-center">
                 <button
+                    type="button"
                     onClick={() => {
                         navigate({
                             search: (prev) => ({ page: (prev.page ?? 1) - 1 }),
@@ -114,6 +115,7 @@ function BadgeIndexComponent() {
                     of {badgeList.totalPages}
                 </span>
                 <button
+                    type="button"
                     onClick={() => {
                         navigate({
                             search: (prev) => ({ page: (prev.page ?? 1) + 1 }),

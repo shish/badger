@@ -1,4 +1,4 @@
-import { RouterProvider, createRouter } from "@tanstack/react-router";
+import { createRouter, RouterProvider } from "@tanstack/react-router";
 import * as React from "react";
 
 import { useContext } from "react";
@@ -13,9 +13,9 @@ const router = createRouter({
     defaultPreload: "intent",
     scrollRestoration: true,
     context: {
-        // @ts-ignore
+        // @ts-expect-error
         pb: undefined,
-        // @ts-ignore
+        // @ts-expect-error
         basket: undefined,
     },
 });
@@ -41,7 +41,7 @@ const App = () => {
 };
 
 function InnerApp() {
-    const { pb, user } = useContext(PocketBaseContext);
+    const { pb } = useContext(PocketBaseContext);
     const basket = useContext(BasketContext);
     return (
         <RouterProvider router={router} context={{ pb: pb, basket: basket }} />

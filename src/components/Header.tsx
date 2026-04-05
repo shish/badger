@@ -36,6 +36,7 @@ export function Header() {
                     </Link>
                     {user && (
                         <button
+                            type="button"
                             onClick={() => {
                                 logout();
                                 navigate({ to: "/" });
@@ -83,5 +84,9 @@ function NewBadgeButton({ user }: { user: any }) {
             );
     }
 
-    return <button onClick={() => newBadge()}>Create</button>;
+    return (
+        <button type="button" onClick={() => newBadge()}>
+            Create
+        </button>
+    );
 }
