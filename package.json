@@ -28,7 +28,7 @@
     "devDependencies": {
         "@biomejs/biome": "^2.4.14",
         "@rsbuild/core": "^2.0.3",
-        "@rsbuild/plugin-react": "^1.4.6",
+        "@rsbuild/plugin-react": "^2.0.0",
         "@tailwindcss/postcss": "^4.2.4",
         "@tanstack/router-plugin": "^1.167.32",
         "@types/node": "^25.0",
