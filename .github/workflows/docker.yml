@@ -24,7 +24,7 @@ jobs:
               with:
                   context: .
                   push: ${{ github.ref == 'refs/heads/main' }}
-                  tags: ${{ vars.DOCKER_IMAGE }}:latest
+                  tags: ${{ vars.DOCKER_USERNAME }}/${{ github.event.repository.name }}:latest
                   cache-from: type=gha
                   cache-to: type=gha,mode=max
 
@@ -34,8 +34,9 @@ jobs:
         needs:
             - build
         steps:
-            - uses: shish/watchtower-update@main
-              with:
-                  url: https://watchtower.shish.io/v1/update
-                  api_token: ${{ secrets.WATCHTOWER_TOKEN }}
-                  images: ${{ vars.DOCKER_IMAGE }}
+          - name: Deploy
+            run: |
+              IMG="${{ vars.DOCKER_USERNAME }}/${{ github.event.repository.name }}"
+              curl -sS -X POST \
+                -H "Authorization: Bearer ${{ secrets.WATCHTOWER_TOKEN }}" \
+                "https://watchtower.shish.io/v1/update?images=$IMG"
