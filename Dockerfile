@@ -23,6 +23,9 @@ COPY --from=be_build /pb /pb
 FROM alpine:latest AS prod
 VOLUME /data
 EXPOSE 8000
+RUN apk add curl
+HEALTHCHECK --start-period=30s --start-interval=5s --interval=5m --timeout=3s \
+    CMD curl --fail http://127.0.0.1:8000/ || exit 1
 COPY --from=be_build /pb /pb
 COPY --from=fe_build /app/dist /app/dist
 CMD ["/pb/pocketbase", "serve", "--http=0.0.0.0:8000", "--publicDir=/app/dist", "--dir=/data"]
