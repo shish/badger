@@ -31,7 +31,7 @@
         "@rsbuild/plugin-react": "^2.1.0",
         "@tailwindcss/postcss": "^4.3.2",
         "@tanstack/router-plugin": "^1.168.18",
-        "@types/node": "^25.0",
+        "@types/node": "^26.1",
         "@types/react": "^19.2.17",
         "@types/react-dom": "^19.2.3",
         "pocketbase": "^0.27.0",
