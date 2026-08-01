@@ -9,32 +9,32 @@
         "format": "biome format --write . && biome check --write ."
     },
     "dependencies": {
-        "@fortawesome/fontawesome-svg-core": "^7.3.0",
-        "@fortawesome/free-solid-svg-icons": "^7.3.0",
-        "@fortawesome/react-fontawesome": "^3.3.1",
+        "@fortawesome/fontawesome-svg-core": "^7.3.1",
+        "@fortawesome/free-solid-svg-icons": "^7.3.1",
+        "@fortawesome/react-fontawesome": "^3.5.0",
         "@react-three/drei": "^10.7.7",
         "@react-three/fiber": "^9.6.1",
-        "@tanstack/react-router": "^1.170.17",
+        "@tanstack/react-router": "^1.170.18",
         "@tanstack/react-router-devtools": "^1.167.0",
-        "autoprefixer": "^10.5.2",
-        "postcss": "^8.5.16",
-        "react": "^19.2.7",
-        "react-dom": "^19.2.7",
+        "autoprefixer": "^10.5.4",
+        "postcss": "^8.5.24",
+        "react": "^19.2.8",
+        "react-dom": "^19.2.8",
         "react-to-print": "^3.3.0",
-        "tailwindcss": "^4.3.2",
+        "tailwindcss": "^4.3.3",
         "three": "^0.185.1",
         "usehooks-ts": "^3.1"
     },
     "devDependencies": {
-        "@biomejs/biome": "^2.5.2",
-        "@rsbuild/core": "^2.1.2",
+        "@biomejs/biome": "^2.5.6",
+        "@rsbuild/core": "^2.1.8",
         "@rsbuild/plugin-react": "^2.1.0",
-        "@tailwindcss/postcss": "^4.3.2",
-        "@tanstack/router-plugin": "^1.168.19",
+        "@tailwindcss/postcss": "^4.3.3",
+        "@tanstack/router-plugin": "^1.168.23",
         "@types/node": "^26.1",
         "@types/react": "^19.2.17",
         "@types/react-dom": "^19.2.3",
         "pocketbase": "^0.27.0",
-        "typescript": "^6.0"
+        "typescript": "^7.0"
     }
 }
